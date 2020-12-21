@@ -71,7 +71,7 @@ abstract class Server implements ServerInterface
 
             $context = stream_context_create($this->contextOptions);
 
-            $this->stream = stream_socket_server($listening, $errno, $errStr, self::$flags, $context);
+            $this->stream = stream_socket_server($listening, $errno, $errStr, static::$flags, $context);
 
             if (!$this->stream) {
                 throw new CreatedException("Server[$listening] create failed：$errno $errStr");

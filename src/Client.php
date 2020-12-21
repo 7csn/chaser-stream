@@ -62,10 +62,10 @@ abstract class Client implements ClientInterface
             $listening = self::listening();
 
             if (empty($this->contextOptions)) {
-                $this->stream = stream_socket_client($listening, $errno, $errStr, self::$timeout, self::$flags);
+                $this->stream = stream_socket_client($listening, $errno, $errStr, static::$timeout, static::$flags);
             } else {
                 $context = stream_context_create($this->contextOptions);
-                $this->stream = stream_socket_client($listening, $errno, $errStr, self::$timeout, self::$flags, $context);
+                $this->stream = stream_socket_client($listening, $errno, $errStr, static::$timeout, static::$flags, $context);
             }
 
             if (!$this->stream) {
