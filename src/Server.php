@@ -69,7 +69,7 @@ abstract class Server implements ServerInterface
 
             $listening = self::listening();
 
-            $context = stream_context_create($this->configurations);
+            $context = stream_context_create($this->contextOptions);
 
             $this->stream = stream_socket_server($listening, $errno, $errStr, self::$flags, $context);
 
