@@ -19,6 +19,13 @@ abstract class Connection implements ConnectionInterface
     use Communication, Configuration, Stream;
 
     /**
+     * 对象标识
+     *
+     * @var string
+     */
+    protected string $hash;
+
+    /**
      * 构造
      *
      * @param resource $stream
@@ -28,5 +35,13 @@ abstract class Connection implements ConnectionInterface
     {
         $this->stream = $stream;
         $this->remoteAddress = $address;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hash(): string
+    {
+        return $this->hash ??= spl_object_hash($this);
     }
 }
