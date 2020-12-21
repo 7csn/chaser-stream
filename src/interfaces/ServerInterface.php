@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace chaser\stream\interfaces;
 
-use chaser\stream\parts\ServiceInterface;
-use chaser\stream\parts\StreamInterface;
+use chaser\stream\interfaces\parts\ServiceInterface;
+use chaser\stream\interfaces\parts\StreamInterface;
 
 /**
  * 流服务器

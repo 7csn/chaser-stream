@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace chaser\stream\interfaces;
 
-use chaser\stream\parts\ConnectedInterface;
+use chaser\stream\interfaces\parts\ConnectedInterface;
 
 /**
  * 有连接的流客户端

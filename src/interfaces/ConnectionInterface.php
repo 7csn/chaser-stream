@@ -6,8 +6,8 @@ namespace chaser\stream\interfaces;
 
 use chaser\stream\interfaces\parts\CommunicationInterface;
 use chaser\stream\interfaces\parts\ConfigurationInterface;
-use chaser\stream\parts\ConnectedInterface;
-use chaser\stream\parts\StreamInterface;
+use chaser\stream\interfaces\parts\ConnectedInterface;
+use chaser\stream\interfaces\parts\StreamInterface;
 
 /**
  * 连接

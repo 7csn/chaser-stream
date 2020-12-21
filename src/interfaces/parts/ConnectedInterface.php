@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace chaser\stream\parts;
+namespace chaser\stream\interfaces\parts;
 
 /**
  * 连接部分
  *
- * @package chaser\stream\parts
+ * @package chaser\stream\interfaces\parts
  */
 interface ConnectedInterface
 {

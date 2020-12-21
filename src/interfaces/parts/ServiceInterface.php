@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace chaser\stream\parts;
+namespace chaser\stream\interfaces\parts;
 
 use chaser\stream\exceptions\CreatedException;
 
 /**
  * 流服务
  *
- * @package chaser\stream\parts
+ * @package chaser\stream\interfaces\parts
  */
 interface ServiceInterface
 {
