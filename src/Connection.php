@@ -57,6 +57,14 @@ abstract class Connection implements ConnectionInterface
     /**
      * @inheritDoc
      */
+    public function connect(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function close(): bool
     {
         if (Stream::close()) {

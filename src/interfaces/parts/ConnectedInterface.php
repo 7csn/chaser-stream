@@ -20,6 +20,8 @@ interface ConnectedInterface
 
     /**
      * 建立连接
+     * 
+     * @return bool
      */
-    public function connect();
+    public function connect(): bool;
 }

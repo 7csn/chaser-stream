@@ -76,6 +76,8 @@ abstract class Server implements ServerInterface
             if (!$this->stream) {
                 throw new CreatedException("Server[$listening] create failed：$errno $errStr");
             }
+
+            stream_set_blocking($this->stream, false);
         }
 
         return $this->stream;
