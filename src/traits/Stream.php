@@ -19,9 +19,7 @@ trait Stream
     protected $stream;
 
     /**
-     * （套接字流）是否有效
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function isActive(): bool
     {
@@ -29,9 +27,7 @@ trait Stream
     }
 
     /**
-     * 返回套接字流
-     *
-     * @return resource
+     * @inheritDoc
      */
     public function socket()
     {
@@ -39,9 +35,7 @@ trait Stream
     }
 
     /**
-     * 关闭
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function close(): bool
     {
