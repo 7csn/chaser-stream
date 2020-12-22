@@ -23,7 +23,7 @@ trait Stream
      */
     public function isActive(): bool
     {
-        return $this->stream && is_resource($this->stream);
+        return is_resource($this->stream) && !feof($this->stream);
     }
 
     /**
