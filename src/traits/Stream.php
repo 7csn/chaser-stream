@@ -29,6 +29,16 @@ trait Stream
     }
 
     /**
+     * 返回套接字流
+     *
+     * @return resource
+     */
+    public function socket()
+    {
+        return $this->stream;
+    }
+
+    /**
      * 关闭
      *
      * @return bool
