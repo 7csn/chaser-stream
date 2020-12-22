@@ -78,7 +78,7 @@ interface CommunicationInterface
      * 发送数据
      *
      * @param string $data
-     * @return bool
+     * @return bool|int
      */
-    public function send(string $data): bool;
+    public function send(string $data);
 }

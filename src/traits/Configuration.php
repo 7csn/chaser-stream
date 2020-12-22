@@ -12,13 +12,6 @@ namespace chaser\stream\traits;
 trait Configuration
 {
     /**
-     * 常规配置
-     *
-     * @var array
-     */
-    protected array $configurations = [];
-
-    /**
      * @inheritDoc
      */
     public function set(array $options)

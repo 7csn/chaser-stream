@@ -35,6 +35,13 @@ abstract class Client implements ClientInterface
     protected static int $timeout = 0;
 
     /**
+     * 常规配置
+     *
+     * @var array
+     */
+    protected array $configurations = [];
+
+    /**
      * 初始化
      *
      * @param string $address

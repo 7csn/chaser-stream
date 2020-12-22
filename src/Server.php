@@ -28,6 +28,13 @@ abstract class Server implements ServerInterface
     protected static int $flags = STREAM_SERVER_BIND | STREAM_SERVER_LISTEN;
 
     /**
+     * 常规配置
+     *
+     * @var array
+     */
+    protected array $configurations = [];
+
+    /**
      * 是否端口复用
      *
      * @return bool
