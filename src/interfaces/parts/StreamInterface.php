@@ -19,7 +19,7 @@ interface StreamInterface
     public function isActive(): bool;
 
     /**
-     * 返回套接字流
+     * 获取套接字流
      *
      * @return resource
      */
