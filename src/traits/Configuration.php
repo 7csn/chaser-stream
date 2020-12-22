@@ -8,6 +8,8 @@ namespace chaser\stream\traits;
  * 配置
  *
  * @package chaser\stream\traits
+ * 
+ * @property array $configurations
  */
 trait Configuration
 {
