@@ -6,7 +6,6 @@ namespace chaser\stream;
 
 use chaser\stream\exceptions\CreatedException;
 use chaser\stream\interfaces\ServerInterface;
-use chaser\stream\traits\Communication;
 use chaser\stream\traits\Configuration;
 use chaser\stream\traits\Service;
 use chaser\stream\traits\Stream;
@@ -18,7 +17,7 @@ use chaser\stream\traits\Stream;
  */
 abstract class Server implements ServerInterface
 {
-    use Communication, Configuration, Service, Stream;
+    use Configuration, Service, Stream;
 
     /**
      * 监听网络标志组合
@@ -33,6 +32,13 @@ abstract class Server implements ServerInterface
      * @var array
      */
     protected array $configurations = [];
+
+    /**
+     * 本地地址
+     *
+     * @var string
+     */
+    protected string $localAddress;
 
     /**
      * 是否端口复用

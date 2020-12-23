@@ -22,7 +22,7 @@ interface ServerInterface extends ServiceInterface, StreamInterface
     /**
      * 服务器接收
      *
-     * @return ConnectionInterface|array|false
+     * @return array|null [$stream, $remoteAddress]
      */
-    public function accept();
+    public function accept(): ?array;
 }

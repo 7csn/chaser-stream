@@ -18,7 +18,7 @@ use chaser\stream\traits\Stream;
  */
 abstract class Client implements ClientInterface
 {
-    use Configuration, Communication, Service, Stream;
+    use Communication, Configuration, Service, Stream;
 
     /**
      * 监听网络标志组合
