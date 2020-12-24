@@ -41,17 +41,6 @@ abstract class Server implements ServerInterface
     protected string $localAddress;
 
     /**
-     * 是否端口复用
-     *
-     * @return bool
-     */
-    public static function reusable(): bool
-    {
-        static $reuse = null;
-        return $reuse ??= version_compare(php_uname('r'), '3.9', '>=');
-    }
-
-    /**
      * 初始化
      *
      * @param string $address
@@ -59,9 +48,6 @@ abstract class Server implements ServerInterface
     public function __construct(string $address)
     {
         $this->localAddress = $address;
-        if (static::reusable()) {
-            $this->contextualize(['socket' => ['so_reuseport' => 1]]);
-        }
         $this->contextualize(['socket' => ['backlog' => self::BACKLOG]]);
     }
 
