@@ -18,7 +18,7 @@ class Message
     /**
      * 消息
      *
-     * @var string|object
+     * @property-read string|object
      */
     protected $message;
 
