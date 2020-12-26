@@ -34,7 +34,6 @@ interface CommunicationInterface
      * 发送数据
      *
      * @param string $data
-     * @return bool|int
      */
     public function send(string $data);
 }

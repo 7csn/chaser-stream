@@ -162,7 +162,7 @@ abstract class Server implements ServerInterface
      */
     protected function resumeAccept()
     {
-        if ($this->accepting === false) {
+        if ($this->stream && $this->accepting === false) {
             $this->reactor->addRead($this->stream, [$this, 'accept']);
             $this->accepting = true;
         }
@@ -173,7 +173,7 @@ abstract class Server implements ServerInterface
      */
     protected function pauseAccept()
     {
-        if ($this->accepting === true) {
+        if ($this->stream && $this->accepting === true) {
             $this->reactor->delRead($this->stream);
             $this->accepting = false;
         }
