@@ -71,7 +71,10 @@ abstract class Client implements ClientInterface
     }
 
     /**
-     * @inheritDoc
+     * 创建客户端套接字流
+     *
+     * @return resource
+     * @throws CreatedException
      */
     protected function create()
     {
