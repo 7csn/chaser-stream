@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace chaser\stream;
 
 use chaser\event\SubscriberInterface;
+use chaser\stream\events\Close;
 use chaser\stream\events\Start;
 use chaser\stream\events\Stop;
 use chaser\stream\traits\Subscribable;
@@ -25,7 +26,8 @@ class ServerSubscriber implements SubscriberInterface
      */
     protected array $events = [
         Start::class => 'start',
-        Stop::class => 'stop'
+        Stop::class => 'stop',
+        Close::class => 'close'
     ];
 
     /**
@@ -60,6 +62,15 @@ class ServerSubscriber implements SubscriberInterface
      * @param Stop $event
      */
     public function stop(Stop $event): void
+    {
+    }
+
+    /**
+     * 关闭流资源事件响应
+     *
+     * @param Close $event
+     */
+    public function close(Close $event): void
     {
     }
 }
