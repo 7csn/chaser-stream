@@ -50,7 +50,7 @@ trait Event
     /**
      * @inheritDoc
      */
-    protected function addSubscriber(string $class): bool
+    public function addSubscriber(string $class): bool
     {
         $able = static::subscribable($class);
         if ($able) {
