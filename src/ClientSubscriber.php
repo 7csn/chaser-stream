@@ -8,6 +8,7 @@ use chaser\event\SubscriberInterface;
 use chaser\stream\events\Close;
 use chaser\stream\events\Connect;
 use chaser\stream\events\Message;
+use chaser\stream\traits\Subscribable;
 
 /**
  * 客户端事件订阅者
@@ -16,6 +17,19 @@ use chaser\stream\events\Message;
  */
 class ClientSubscriber implements SubscriberInterface
 {
+    use Subscribable;
+
+    /**
+     * 订阅事件库
+     *
+     * @var string[]
+     */
+    protected array $events = [
+        Connect::class => 'connect',
+        Message::class => 'message',
+        Close::class => 'close'
+    ];
+
     /**
      * 客户端
      *
@@ -31,18 +45,6 @@ class ClientSubscriber implements SubscriberInterface
     public function __construct(Client $client)
     {
         $this->client = $client;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function events(): array
-    {
-        return [
-            Connect::class => 'connect',
-            Message::class => 'message',
-            Close::class => 'close'
-        ];
     }
 
     /**

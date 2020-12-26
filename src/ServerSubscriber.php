@@ -7,6 +7,7 @@ namespace chaser\stream;
 use chaser\event\SubscriberInterface;
 use chaser\stream\events\Start;
 use chaser\stream\events\Stop;
+use chaser\stream\traits\Subscribable;
 
 /**
  * 服务器事件订阅者
@@ -15,6 +16,18 @@ use chaser\stream\events\Stop;
  */
 class ServerSubscriber implements SubscriberInterface
 {
+    use Subscribable;
+
+    /**
+     * 订阅事件库
+     *
+     * @var string[]
+     */
+    protected array $events = [
+        Start::class => 'start',
+        Stop::class => 'stop'
+    ];
+
     /**
      * 服务器
      *
@@ -30,17 +43,6 @@ class ServerSubscriber implements SubscriberInterface
     public function __construct(Server $server)
     {
         $this->server = $server;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function events(): array
-    {
-        return [
-            Start::class => 'start',
-            Stop::class => 'stop'
-        ];
     }
 
     /**
