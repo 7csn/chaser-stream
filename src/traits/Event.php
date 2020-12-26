@@ -36,25 +36,15 @@ trait Event
     }
 
     /**
-     * 判断给定订阅者类型是否可用
-     *
-     * @param string $class
-     * @return bool
-     */
-    final public static function subscribable(string $class): bool
-    {
-        $subscriber = static::subscriber();
-        return $class instanceof $subscriber;
-    }
-
-    /**
      * @inheritDoc
      */
     public function addSubscriber(string $class): bool
     {
-        $able = static::subscribable($class);
+        $object = new $class($this);
+        $subscriber = static::subscriber();
+        $able = $object instanceof $subscriber;
         if ($able) {
-            $this->dispatcher->addSubscriber(new $class($this));
+            $this->dispatcher->addSubscriber($object);
         }
         return $able;
     }

@@ -19,14 +19,6 @@ interface EventInterface
     public static function subscriber(): string;
 
     /**
-     * 判断给定订阅者类型是否可用
-     *
-     * @param string $class
-     * @return bool
-     */
-    public static function subscribable(string $class): bool;
-
-    /**
      * 添加订阅者
      *
      * @param string $class
