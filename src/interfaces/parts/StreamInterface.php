@@ -12,11 +12,11 @@ namespace chaser\stream\interfaces\parts;
 interface StreamInterface
 {
     /**
-     * 套接字流是否有效
+     * 套接字是否失效
      *
      * @return bool
      */
-    public function isActive(): bool;
+    public function invalid(): bool;
 
     /**
      * 获取套接字流

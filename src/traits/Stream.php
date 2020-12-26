@@ -21,9 +21,9 @@ trait Stream
     /**
      * @inheritDoc
      */
-    public function isActive(): bool
+    public function invalid(): bool
     {
-        return is_resource($this->stream) && !feof($this->stream);
+        return !is_resource($this->stream) || feof($this->stream);
     }
 
     /**
