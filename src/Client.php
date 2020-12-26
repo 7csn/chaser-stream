@@ -60,6 +60,8 @@ abstract class Client implements ClientInterface
     {
         $this->reactor = $reactor;
         $this->remoteAddress = $address;
+
+        $this->initEventDispatcher();
     }
 
     /**
