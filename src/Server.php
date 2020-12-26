@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace chaser\stream;
 
+use chaser\reactor\Reactor;
+use chaser\stream\events\Start;
+use chaser\stream\events\Stop;
 use chaser\stream\exceptions\CreatedException;
 use chaser\stream\interfaces\ServerInterface;
 use chaser\stream\traits\Configuration;
+use chaser\stream\traits\Event;
 use chaser\stream\traits\Service;
 use chaser\stream\traits\Stream;
 
@@ -17,7 +21,21 @@ use chaser\stream\traits\Stream;
  */
 abstract class Server implements ServerInterface
 {
-    use Configuration, Service, Stream;
+    use Configuration, Event, Service, Stream;
+
+    /**
+     * 事件反应器
+     *
+     * @var Reactor
+     */
+    protected Reactor $reactor;
+
+    /**
+     * 本地地址
+     *
+     * @var string
+     */
+    protected string $localAddress;
 
     /**
      * 监听网络标志组合
@@ -34,21 +52,32 @@ abstract class Server implements ServerInterface
     protected array $configurations = [];
 
     /**
-     * 本地地址
+     * 接收状态
      *
-     * @var string
+     * @var bool
      */
-    protected string $localAddress;
+    protected bool $accepting = false;
+
+    /**
+     * 是否处于停止中
+     *
+     * @var bool
+     */
+    protected bool $stopping = false;
 
     /**
      * 初始化
      *
+     * @param Reactor $reactor
      * @param string $address
      */
-    public function __construct(string $address)
+    public function __construct(Reactor $reactor, string $address)
     {
+        $this->reactor = $reactor;
         $this->localAddress = $address;
         $this->contextualize(['socket' => ['backlog' => self::BACKLOG]]);
+
+        $this->initEventDispatcher();
     }
 
     /**
@@ -62,11 +91,37 @@ abstract class Server implements ServerInterface
     /**
      * @inheritDoc
      */
-    public function create()
+    public function start()
+    {
+        $this->listen();
+        $this->dispatchCache(Start::class);
+        $this->reactor->loop();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function stop()
+    {
+        if ($this->stopping === false) {
+            $this->unListen();
+            $this->stopping = true;
+            $this->dispatchCache(Stop::class);
+            $this->dispatchClear();
+        }
+    }
+
+    /**
+     * 创建服务器套接字流
+     *
+     * @return resource
+     * @throws CreatedException
+     */
+    protected function create()
     {
         if (!$this->stream) {
 
-            $listening = self::listening();
+            $listening = $this->socketAddress();
 
             $context = stream_context_create($this->contextOptions);
 
@@ -80,5 +135,47 @@ abstract class Server implements ServerInterface
         }
 
         return $this->stream;
+    }
+
+    /**
+     * 监听网络
+     *
+     * @throws CreatedException
+     */
+    protected function listen()
+    {
+        $this->create();
+        $this->resumeAccept();
+    }
+
+    /**
+     * 移除网络监听
+     */
+    protected function unListen()
+    {
+        $this->pauseAccept();
+        $this->close();
+    }
+
+    /**
+     * 开始或继续接收
+     */
+    protected function resumeAccept()
+    {
+        if ($this->accepting === false) {
+            $this->reactor->addRead($this->stream, [$this, 'accept']);
+            $this->accepting = true;
+        }
+    }
+
+    /**
+     * 暂停接收
+     */
+    protected function pauseAccept()
+    {
+        if ($this->accepting === true) {
+            $this->reactor->delRead($this->stream);
+            $this->accepting = false;
+        }
     }
 }

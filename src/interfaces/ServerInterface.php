@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace chaser\stream\interfaces;
 
+use chaser\stream\exceptions\CreatedException;
+use chaser\stream\interfaces\parts\EventInterface;
 use chaser\stream\interfaces\parts\ServiceInterface;
 use chaser\stream\interfaces\parts\StreamInterface;
 
@@ -12,7 +14,7 @@ use chaser\stream\interfaces\parts\StreamInterface;
  *
  * @package chaser\stream\interfaces
  */
-interface ServerInterface extends ServiceInterface, StreamInterface
+interface ServerInterface extends EventInterface, ServiceInterface, StreamInterface
 {
     /**
      * 默认挂起连接数量上限
@@ -20,9 +22,19 @@ interface ServerInterface extends ServiceInterface, StreamInterface
     public const BACKLOG = 102400;
 
     /**
-     * 服务器接收
+     * 启动服务器
      *
-     * @return array|null [$stream, $remoteAddress]
+     * @throws CreatedException
      */
-    public function accept(): ?array;
+    public function start();
+
+    /**
+     * 服务器接收
+     */
+    public function accept();
+
+    /**
+     * 停止服务器
+     */
+    public function stop();
 }

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace chaser\stream\interfaces\parts;
 
-use chaser\stream\exceptions\CreatedException;
-
 /**
  * 流服务
  *
@@ -35,10 +33,7 @@ interface ServiceInterface
     public function target(): string;
 
     /**
-     * 创建监听服务套接字流
-     *
-     * @return resource
-     * @throws CreatedException
+     * 关闭流服务资源
      */
-    public function create();
+    public function close();
 }

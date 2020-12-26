@@ -24,11 +24,4 @@ interface StreamInterface
      * @return resource
      */
     public function socket();
-
-    /**
-     * 关闭套接字流资源
-     *
-     * @return bool
-     */
-    public function close(): bool;
 }

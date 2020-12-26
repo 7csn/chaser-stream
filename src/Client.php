@@ -8,6 +8,7 @@ use chaser\stream\exceptions\CreatedException;
 use chaser\stream\interfaces\ClientInterface;
 use chaser\stream\traits\Communication;
 use chaser\stream\traits\Configuration;
+use chaser\stream\traits\Event;
 use chaser\stream\traits\Service;
 use chaser\stream\traits\Stream;
 
@@ -18,7 +19,7 @@ use chaser\stream\traits\Stream;
  */
 abstract class Client implements ClientInterface
 {
-    use Communication, Configuration, Service, Stream;
+    use Communication, Configuration, Event, Service, Stream;
 
     /**
      * 监听网络标志组合
@@ -62,11 +63,11 @@ abstract class Client implements ClientInterface
     /**
      * @inheritDoc
      */
-    public function create()
+    protected function create()
     {
         if (!$this->stream) {
 
-            $listening = self::listening();
+            $listening = $this->socketAddress();
 
             if (empty($this->contextOptions)) {
                 $this->stream = stream_socket_client($listening, $errno, $errStr, static::$timeout, static::$flags);

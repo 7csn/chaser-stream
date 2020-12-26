@@ -27,8 +27,6 @@ interface CommunicationInterface
 
     /**
      * 接收数据
-     *
-     * @return false|string
      */
     public function receive();
 

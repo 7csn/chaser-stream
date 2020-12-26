@@ -23,7 +23,7 @@ trait Service
      *
      * @return string
      */
-    public function listening(): string
+    public function socketAddress(): string
     {
         return static::transport() . '://' . $this->target();
     }

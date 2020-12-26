@@ -35,14 +35,13 @@ trait Stream
     }
 
     /**
-     * @inheritDoc
+     * 关闭套接字资源
      */
-    public function close(): bool
+    protected function closeSocket()
     {
-        $close = $this->isActive() && fclose($this->stream);
-        if ($close) {
-            $this->stream = null;
+        if (is_resource($this->stream)) {
+            fclose($this->stream);
         }
-        return $close;
+        $this->stream = null;
     }
 }
