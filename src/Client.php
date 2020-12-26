@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace chaser\stream;
 
+use chaser\reactor\Reactor;
 use chaser\stream\exceptions\CreatedException;
 use chaser\stream\interfaces\ClientInterface;
 use chaser\stream\traits\Communication;
@@ -20,6 +21,13 @@ use chaser\stream\traits\Stream;
 abstract class Client implements ClientInterface
 {
     use Communication, Configuration, Event, Service, Stream;
+
+    /**
+     * 事件反应器
+     *
+     * @var Reactor
+     */
+    protected Reactor $reactor;
 
     /**
      * 监听网络标志组合
@@ -45,10 +53,12 @@ abstract class Client implements ClientInterface
     /**
      * 初始化
      *
+     * @param Reactor $reactor
      * @param string $address
      */
-    public function __construct(string $address)
+    public function __construct(Reactor $reactor, string $address)
     {
+        $this->reactor = $reactor;
         $this->remoteAddress = $address;
     }
 
