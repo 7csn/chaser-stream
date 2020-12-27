@@ -6,13 +6,10 @@ namespace chaser\stream;
 
 use chaser\reactor\Reactor;
 use chaser\stream\events\Start;
-use chaser\stream\events\Stop;
 use chaser\stream\exceptions\CreatedException;
 use chaser\stream\interfaces\ServerInterface;
-use chaser\stream\traits\Configuration;
-use chaser\stream\traits\Event;
+use chaser\stream\traits\Common;
 use chaser\stream\traits\Service;
-use chaser\stream\traits\Stream;
 
 /**
  * 流服务器
@@ -21,7 +18,7 @@ use chaser\stream\traits\Stream;
  */
 abstract class Server implements ServerInterface
 {
-    use Configuration, Event, Service, Stream;
+    use Common, Service;
 
     /**
      * 事件反应器
@@ -106,8 +103,6 @@ abstract class Server implements ServerInterface
         if ($this->stopping === false) {
             $this->unListen();
             $this->stopping = true;
-            $this->dispatchCache(Stop::class);
-            $this->dispatchClear();
         }
     }
 

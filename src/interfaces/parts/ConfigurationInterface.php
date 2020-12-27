@@ -17,20 +17,4 @@ interface ConfigurationInterface
      * @param array $options
      */
     public function set(array $options);
-
-    /**
-     * 以属性方式设置配置项
-     *
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set(string $name, $value);
-
-    /**
-     * 以属性方式获取配置项
-     *
-     * @param string $name
-     * @return mixed|null
-     */
-    public function __get(string $name);
 }

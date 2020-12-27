@@ -7,11 +7,9 @@ namespace chaser\stream;
 use chaser\reactor\Reactor;
 use chaser\stream\exceptions\CreatedException;
 use chaser\stream\interfaces\ClientInterface;
+use chaser\stream\traits\Common;
 use chaser\stream\traits\Communication;
-use chaser\stream\traits\Configuration;
-use chaser\stream\traits\Event;
 use chaser\stream\traits\Service;
-use chaser\stream\traits\Stream;
 
 /**
  * 流客户端
@@ -20,7 +18,7 @@ use chaser\stream\traits\Stream;
  */
 abstract class Client implements ClientInterface
 {
-    use Communication, Configuration, Event, Service, Stream;
+    use Communication, Common, Service;
 
     /**
      * 事件反应器
