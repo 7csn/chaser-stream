@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace chaser\stream;
 
 use chaser\reactor\Reactor;
-use chaser\stream\exceptions\CreatedException;
+use chaser\stream\events\OpenConnectionFail;
 use chaser\stream\interfaces\ClientInterface;
-use chaser\stream\traits\Common;
-use chaser\stream\traits\Communication;
-use chaser\stream\traits\Service;
+use chaser\stream\traits\{Communication, Helper, Service};
 
 /**
  * 流客户端
@@ -18,7 +16,7 @@ use chaser\stream\traits\Service;
  */
 abstract class Client implements ClientInterface
 {
-    use Communication, Common, Service;
+    use Communication, Helper, Service;
 
     /**
      * 事件反应器
@@ -49,7 +47,7 @@ abstract class Client implements ClientInterface
     protected array $configurations = [];
 
     /**
-     * 初始化
+     * 构造函数
      *
      * @param Reactor $reactor
      * @param string $address
@@ -73,27 +71,35 @@ abstract class Client implements ClientInterface
     /**
      * 创建客户端套接字流
      *
-     * @return resource
-     * @throws CreatedException
+     * @return bool
      */
-    protected function create()
+    protected function create(): bool
     {
         if (!$this->stream) {
 
-            $listening = $this->socketAddress();
-
-            if (empty($this->contextOptions)) {
-                $this->stream = stream_socket_client($listening, $errno, $errStr, static::$timeout, static::$flags);
-            } else {
-                $context = stream_context_create($this->contextOptions);
-                $this->stream = stream_socket_client($listening, $errno, $errStr, static::$timeout, static::$flags, $context);
-            }
+            $this->stream = $this->openConnection($this->socketAddress(), $errno, $errStr, static::$timeout, static::$flags);
 
             if (!$this->stream) {
-                throw new CreatedException("Client[$listening] create failed：$errno $errStr");
+                $this->dispatch(OpenConnectionFail::class, $errno, $errStr);
+                return false;
             }
         }
 
-        return $this->stream;
+        return true;
+    }
+
+    /**
+     * 打开到服务器套接字流的连接
+     *
+     * @param string $address
+     * @param int $errno
+     * @param string $errStr
+     * @param int $timeout
+     * @param int $flags
+     * @return false|resource
+     */
+    protected function openConnection(string $address, int &$errno, string &$errStr, int $timeout, int $flags)
+    {
+        return stream_socket_client($address, $errno, $errStr, $timeout, $flags);
     }
 }

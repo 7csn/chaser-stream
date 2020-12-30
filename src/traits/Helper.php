@@ -6,13 +6,14 @@ namespace chaser\stream\traits;
 
 use chaser\event\Dispatcher;
 use chaser\stream\events\Close;
+use Throwable;
 
 /**
- * 服务器、客户端、连接通信公共部分（配置、套接字流、事件调度）
+ * 助手（配置、事件调度、套接字流）
  *
  * @package chaser\stream\traits
  */
-trait Common
+trait Helper
 {
     /**
      * 事件调度器
@@ -55,25 +56,14 @@ trait Common
     public function set(array $options)
     {
         foreach ($options as $name => $value) {
-            $this->{$name} = $value;
+            if (gettype($this->{$name}) === gettype($value)) {
+                $this->configurations[$name] = $value;
+            }
         }
     }
 
     /**
-     * 以属性方式设置配置项
-     *
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set(string $name, $value)
-    {
-        if (gettype($this->{$name}) === gettype($value)) {
-            $this->configurations[$name] = $value;
-        }
-    }
-
-    /**
-     * 以属性方式获取配置项
+     * 属性、配置项可读
      *
      * @param string $name
      * @return mixed|null
@@ -89,14 +79,6 @@ trait Common
     public function invalid(): bool
     {
         return !is_resource($this->stream) || feof($this->stream);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function socket()
-    {
-        return $this->stream;
     }
 
     /**
@@ -129,7 +111,10 @@ trait Common
      */
     protected function dispatch(string $class, ...$args)
     {
-        $this->dispatcher->dispatch(new $class(...$args));
+        try {
+            $this->dispatcher->dispatch(new $class(...$args));
+        } catch (Throwable $e) {
+        }
     }
 
     /**
@@ -139,7 +124,10 @@ trait Common
      */
     protected function dispatchCache(string $class)
     {
-        $event = $this->events[$class] ??= new $class;
-        $this->dispatcher->dispatch($event);
+        try {
+            $event = $this->events[$class] ??= new $class;
+            $this->dispatcher->dispatch($event);
+        } catch (Throwable $e) {
+        }
     }
 }

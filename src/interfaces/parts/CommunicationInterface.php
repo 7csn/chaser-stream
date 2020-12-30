@@ -26,6 +26,11 @@ interface CommunicationInterface
     public function getLocalAddress(): string;
 
     /**
+     * 建立连接
+     */
+    public function connect();
+
+    /**
      * 接收数据
      */
     public function receive();
@@ -36,4 +41,11 @@ interface CommunicationInterface
      * @param string $data
      */
     public function send(string $data);
+
+    /**
+     * 关闭套接字流资源
+     *
+     * @param string|null $data
+     */
+    public function close(string $data = null);
 }

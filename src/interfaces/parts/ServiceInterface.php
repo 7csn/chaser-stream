@@ -19,21 +19,9 @@ interface ServiceInterface
     public static function transport(): string;
 
     /**
-     * 上下文绑定配置
-     *
-     * @param array $options
-     */
-    public function contextualize(array $options);
-
-    /**
      * 服务监听地址
      *
      * @return string
      */
     public function target(): string;
-
-    /**
-     * 关闭流服务资源
-     */
-    public function close();
 }

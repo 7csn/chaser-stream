@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace chaser\stream\interfaces;
 
 use chaser\stream\exceptions\CreatedException;
-use chaser\stream\interfaces\parts\EventInterface;
-use chaser\stream\interfaces\parts\ServiceInterface;
-use chaser\stream\interfaces\parts\StreamInterface;
+use chaser\stream\interfaces\parts\{ContextInterface, HelperInterface, ServiceInterface};
 
 /**
  * 流服务器
  *
  * @package chaser\stream\interfaces
  */
-interface ServerInterface extends EventInterface, ServiceInterface, StreamInterface
+interface ServerInterface extends ServiceInterface, ContextInterface, HelperInterface
 {
     /**
      * 默认挂起连接数量上限

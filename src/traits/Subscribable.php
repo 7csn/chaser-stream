@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace chaser\stream\traits;
 
 /**
- * 订阅相关
+ * 事件订阅者相关
  *
  * @package chaser\stream\traits
  */

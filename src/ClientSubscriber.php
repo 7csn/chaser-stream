@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace chaser\stream;
 
 use chaser\event\SubscriberInterface;
-use chaser\stream\events\Close;
-use chaser\stream\events\Connect;
-use chaser\stream\events\Message;
+use chaser\stream\events\{Close, Connect, Message, OpenConnectionFail};
 use chaser\stream\traits\Subscribable;
 
 /**
@@ -27,7 +25,8 @@ class ClientSubscriber implements SubscriberInterface
     protected array $events = [
         Connect::class => 'connect',
         Message::class => 'message',
-        Close::class => 'close'
+        Close::class => 'close',
+        OpenConnectionFail::class => 'openConnectionFail'
     ];
 
     /**
@@ -71,6 +70,15 @@ class ClientSubscriber implements SubscriberInterface
      * @param Close $event
      */
     public function close(Close $event): void
+    {
+    }
+
+    /**
+     * 关闭事件响应
+     *
+     * @param OpenConnectionFail $event
+     */
+    public function openConnectionFail(OpenConnectionFail $event): void
     {
     }
 }

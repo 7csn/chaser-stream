@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace chaser\stream;
 
 use chaser\event\SubscriberInterface;
-use chaser\stream\events\Close;
-use chaser\stream\events\Start;
-use chaser\stream\events\Stop;
+use chaser\stream\events\{Close, Start, Stop};
 use chaser\stream\traits\Subscribable;
 
 /**

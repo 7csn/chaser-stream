@@ -8,8 +8,7 @@ use chaser\reactor\Reactor;
 use chaser\stream\events\Start;
 use chaser\stream\exceptions\CreatedException;
 use chaser\stream\interfaces\ServerInterface;
-use chaser\stream\traits\Common;
-use chaser\stream\traits\Service;
+use chaser\stream\traits\{Context, Helper, Service};
 
 /**
  * 流服务器
@@ -18,7 +17,7 @@ use chaser\stream\traits\Service;
  */
 abstract class Server implements ServerInterface
 {
-    use Common, Service;
+    use Context, Helper, Service;
 
     /**
      * 事件反应器
@@ -42,6 +41,17 @@ abstract class Server implements ServerInterface
     protected static int $flags = STREAM_SERVER_BIND | STREAM_SERVER_LISTEN;
 
     /**
+     * 资源流上下文配置
+     *
+     * @var array[]
+     */
+    protected array $contextOptions = [
+        'socket' => [
+            'backlog' => self::BACKLOG
+        ]
+    ];
+
+    /**
      * 常规配置
      *
      * @var array
@@ -63,7 +73,12 @@ abstract class Server implements ServerInterface
     protected bool $stopping = false;
 
     /**
-     * 初始化
+     * 关闭套接字流资源
+     */
+    abstract protected function close();
+
+    /**
+     * 构造函数
      *
      * @param Reactor $reactor
      * @param string $address
@@ -72,7 +87,6 @@ abstract class Server implements ServerInterface
     {
         $this->reactor = $reactor;
         $this->localAddress = $address;
-        $this->contextualize(['socket' => ['backlog' => self::BACKLOG]]);
 
         $this->initEventDispatcher();
     }
@@ -109,27 +123,24 @@ abstract class Server implements ServerInterface
     /**
      * 创建服务器套接字流
      *
-     * @return resource
      * @throws CreatedException
      */
     protected function create()
     {
         if (!$this->stream) {
 
-            $listening = $this->socketAddress();
+            $socketAddress = $this->socketAddress();
 
             $context = stream_context_create($this->contextOptions);
 
-            $this->stream = stream_socket_server($listening, $errno, $errStr, static::$flags, $context);
+            $this->stream = stream_socket_server($socketAddress, $errno, $errStr, static::$flags, $context);
 
             if (!$this->stream) {
-                throw new CreatedException("Server[$listening] create failed：$errno $errStr");
+                throw new CreatedException("Server[$socketAddress] create failed：$errno $errStr");
             }
 
             stream_set_blocking($this->stream, false);
         }
-
-        return $this->stream;
     }
 
     /**
@@ -172,5 +183,13 @@ abstract class Server implements ServerInterface
             $this->reactor->delRead($this->stream);
             $this->accepting = false;
         }
+    }
+
+    /**
+     * 析构函数：移除网络监听
+     */
+    public function __destruct()
+    {
+        $this->unListen();
     }
 }

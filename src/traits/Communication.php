@@ -42,4 +42,20 @@ trait Communication
     {
         return $this->remoteAddress;
     }
+
+    /**
+     * 析构函数：关闭套接字流资源
+     */
+    public function __destruct()
+    {
+        $this->close();
+    }
+
+    /**
+     * 通信接收数据监听
+     */
+    protected function addRecvReactor()
+    {
+        $this->reactor->addRead($this->stream, [$this, 'receive']);
+    }
 }
