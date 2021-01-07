@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace chaser\stream;
 
 use chaser\event\SubscriberInterface;
+use chaser\stream\interfaces\ServerInterface;
 use chaser\stream\events\{Close, Start, Stop};
 use chaser\stream\traits\Subscribable;
 
@@ -31,16 +32,16 @@ class ServerSubscriber implements SubscriberInterface
     /**
      * 服务器
      *
-     * @var Server
+     * @var ServerInterface
      */
-    protected Server $server;
+    protected ServerInterface $server;
 
     /**
      * 初始化服务器
      *
-     * @param Server $server
+     * @param ServerInterface $server
      */
-    public function __construct(Server $server)
+    public function __construct(ServerInterface $server)
     {
         $this->server = $server;
     }
