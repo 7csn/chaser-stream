@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace chaser\stream;
 
-use chaser\reactor\Reactor;
+use chaser\reactor\Driver;
 use chaser\stream\events\OpenConnectionFail;
 use chaser\stream\interfaces\ClientInterface;
 use chaser\stream\traits\{Communication, Helper, Service};
@@ -21,9 +21,9 @@ abstract class Client implements ClientInterface
     /**
      * 事件反应器
      *
-     * @var Reactor
+     * @var Driver
      */
-    protected Reactor $reactor;
+    protected Driver $reactor;
 
     /**
      * 监听网络标志组合
@@ -40,19 +40,12 @@ abstract class Client implements ClientInterface
     protected static int $timeout = 0;
 
     /**
-     * 常规配置
-     *
-     * @var array
-     */
-    protected array $configurations = [];
-
-    /**
      * 构造函数
      *
-     * @param Reactor $reactor
+     * @param Driver $reactor
      * @param string $address
      */
-    public function __construct(Reactor $reactor, string $address)
+    public function __construct(Driver $reactor, string $address)
     {
         $this->reactor = $reactor;
         $this->remoteAddress = $address;

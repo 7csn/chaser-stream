@@ -44,8 +44,6 @@ interface CommunicationInterface
 
     /**
      * 关闭套接字流资源
-     *
-     * @param string|null $data
      */
-    public function close(string $data = null);
+    public function close();
 }

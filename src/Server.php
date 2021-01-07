@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace chaser\stream;
 
-use chaser\reactor\Reactor;
+use chaser\reactor\Driver;
 use chaser\stream\events\Start;
 use chaser\stream\exceptions\CreatedException;
 use chaser\stream\interfaces\ServerInterface;
@@ -22,9 +22,9 @@ abstract class Server implements ServerInterface
     /**
      * 事件反应器
      *
-     * @var Reactor
+     * @var Driver
      */
-    protected Reactor $reactor;
+    protected Driver $reactor;
 
     /**
      * 本地地址
@@ -52,13 +52,6 @@ abstract class Server implements ServerInterface
     ];
 
     /**
-     * 常规配置
-     *
-     * @var array
-     */
-    protected array $configurations = [];
-
-    /**
      * 接收状态
      *
      * @var bool
@@ -80,10 +73,10 @@ abstract class Server implements ServerInterface
     /**
      * 构造函数
      *
-     * @param Reactor $reactor
+     * @param Driver $reactor
      * @param string $address
      */
-    public function __construct(Reactor $reactor, string $address)
+    public function __construct(Driver $reactor, string $address)
     {
         $this->reactor = $reactor;
         $this->localAddress = $address;
