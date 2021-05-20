@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
 namespace chaser\stream\interfaces\parts;
 
 /**
- * 通信
+ * 通信部分接口
  *
  * @package chaser\stream\interfaces\parts
  */
@@ -45,5 +43,5 @@ interface CommunicationInterface
     /**
      * 关闭套接字流资源
      */
-    public function close();
+    public function close(): void;
 }

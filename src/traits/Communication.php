@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
 namespace chaser\stream\traits;
 
+use chaser\stream\interfaces\parts\CommunicationInterface;
+
 /**
- * 通信
+ * 通信特征
  *
  * @package chaser\stream\traits
  *
- * @property resource $stream
+ * @see CommunicationInterface
  */
 trait Communication
 {
@@ -18,21 +18,21 @@ trait Communication
      *
      * @var string
      */
-    protected string $localAddress;
+    private string $localAddress;
 
     /**
      * 远程地址
      *
      * @var string
      */
-    protected string $remoteAddress;
+    private string $remoteAddress;
 
     /**
      * @inheritDoc
      */
     public function getLocalAddress(): string
     {
-        return $this->localAddress ??= (string)stream_socket_get_name($this->stream, false);
+        return $this->localAddress ??= (string)stream_socket_get_name($this->socket, false);
     }
 
     /**
@@ -49,13 +49,5 @@ trait Communication
     public function __destruct()
     {
         $this->close();
-    }
-
-    /**
-     * 通信接收数据监听
-     */
-    protected function addRecvReactor()
-    {
-        $this->reactor->addRead($this->stream, [$this, 'receive']);
     }
 }

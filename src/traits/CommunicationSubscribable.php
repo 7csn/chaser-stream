@@ -4,34 +4,33 @@ declare(strict_types=1);
 
 namespace chaser\stream\traits;
 
-use chaser\stream\events\{Close, Connect, Message};
+use chaser\stream\events\{SocketClose, Connect, Message};
 
 /**
- * 通信事件订阅者相关
+ * 通信事件订阅特征
  *
  * @package chaser\stream\traits
  */
 trait CommunicationSubscribable
 {
-    use Subscribable;
-
     /**
-     * 订阅事件库
-     *
-     * @var string[]
+     * @inheritDoc
      */
-    protected array $events = [
-        Close::class => 'close',
-        Connect::class => 'connect',
-        Message::class => 'message'
-    ];
+    public static function events(): array
+    {
+        return [
+            SocketClose::class => 'close',
+            Connect::class => 'connect',
+            Message::class => 'message'
+        ];
+    }
 
     /**
      * 关闭事件响应
      *
-     * @param Close $event
+     * @param SocketClose $event
      */
-    public function close(Close $event): void
+    public function close(SocketClose $event): void
     {
     }
 

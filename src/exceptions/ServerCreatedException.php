@@ -1,16 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 namespace chaser\stream\exceptions;
 
 use Exception;
 
 /**
- * 创建服务异常
+ * 流服务器创建异常类
  *
  * @package chaser\stream\exceptions
  */
-class CreatedException extends Exception
+class ServerCreatedException extends Exception implements ExceptionInterface
 {
 }

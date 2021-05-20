@@ -3,7 +3,8 @@
   "description": "流资源服务，用于构建流服务器及客户端",
   "type": "library",
   "require": {
-    "php": ">=7.4.0",
+    "php": "^8.0",
+    "7csn/container": "^1.0",
     "7csn/event": "^1.0",
     "7csn/reactor": "^1.0"
   },

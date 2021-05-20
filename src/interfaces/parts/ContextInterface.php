@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
 namespace chaser\stream\interfaces\parts;
 
 /**
- * 资源流上下文
+ * 流资源上下文部分接口
  *
  * @package chaser\stream\interfaces\parts
  */
@@ -16,5 +14,5 @@ interface ContextInterface
      *
      * @param array $options
      */
-    public function contextualize(array $options);
+    public function contextualize(array $options): void;
 }

@@ -1,23 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 namespace chaser\stream\interfaces\parts;
 
 /**
- * 助手（配置、事件调度、套接字流）
+ * 公共部分接口（事件调度、属性配置、套接字流）
  *
  * @package chaser\stream\interfaces\parts
  */
-interface HelperInterface
+interface CommonInterface
 {
-    /**
-     * 批量配置选项
-     *
-     * @param array $options
-     */
-    public function set(array $options);
-
     /**
      * 有效订阅者类型
      *
@@ -32,6 +23,13 @@ interface HelperInterface
      * @return bool
      */
     public function addSubscriber(string $class): bool;
+
+    /**
+     * 批量配置属性
+     *
+     * @param array $options
+     */
+    public function configure(array $options): void;
 
     /**
      * 套接字是否失效

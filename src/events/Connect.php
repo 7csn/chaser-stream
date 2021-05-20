@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace chaser\stream\events;
 
 /**
- * 连接事件
+ * 通信连接事件类
  *
  * @package chaser\stream\events
  */

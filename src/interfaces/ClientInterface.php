@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
 namespace chaser\stream\interfaces;
 
-use chaser\stream\interfaces\parts\{CommunicationInterface, HelperInterface, ServiceInterface};
+use chaser\stream\interfaces\parts\CommonInterface;
+use chaser\stream\interfaces\parts\CommunicationInterface;
+use chaser\stream\interfaces\parts\ServiceInterface;
 
 /**
- * 流客户端
+ * 流客户端接口
  *
  * @package chaser\stream\interfaces
  */
-interface ClientInterface extends ServiceInterface, CommunicationInterface, HelperInterface
+interface ClientInterface extends CommonInterface, CommunicationInterface, ServiceInterface
 {
 }

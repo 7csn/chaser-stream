@@ -5,30 +5,25 @@ declare(strict_types=1);
 namespace chaser\stream\events;
 
 use chaser\stream\traits\PropertyReadable;
+use Stringable;
 
 /**
- * 消息事件
+ * 消息事件类
  *
  * @package chaser\stream\events
+ *
+ * @property-read Stringable $message
  */
 class Message
 {
     use PropertyReadable;
 
     /**
-     * 消息
-     *
-     * @property-read string|object
-     */
-    protected $message;
-
-    /**
      * 初始化消息
      *
-     * @param string|object $message
+     * @param Stringable $message
      */
-    public function __construct($message)
+    public function __construct(private Stringable $message)
     {
-        $this->message = $message;
     }
 }
