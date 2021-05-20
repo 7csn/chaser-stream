@@ -6,6 +6,7 @@ use chaser\container\ContainerInterface;
 use chaser\reactor\Driver;
 use chaser\stream\exceptions\ClientConnectedException;
 use chaser\stream\interfaces\ClientInterface;
+use chaser\stream\subscribers\ClientSubscriber;
 use chaser\stream\traits\Common;
 use chaser\stream\traits\Communication;
 use chaser\stream\traits\Service;
@@ -32,6 +33,14 @@ abstract class Client implements ClientInterface
      * @var int
      */
     protected static int $timeout = 0;
+
+    /**
+     * @inheritDoc
+     */
+    public function addSubscriber(string $class): bool
+    {
+        return ClientSubscriber::class;
+    }
 
     /**
      * 构造函数
