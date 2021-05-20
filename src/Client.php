@@ -49,9 +49,11 @@ abstract class Client implements ClientInterface
     protected string $errorMessage = '';
 
     /**
-     * @inheritDoc
+     * 有效订阅者类型
+     *
+     * @return string
      */
-    public function addSubscriber(string $class): bool
+    public static function subscriber(): string
     {
         return ClientSubscriber::class;
     }
