@@ -35,6 +35,20 @@ abstract class Client implements ClientInterface
     protected static int $timeout = 0;
 
     /**
+     * 创建套接字流误号
+     *
+     * @var int
+     */
+    protected int $errorNumber = 0;
+
+    /**
+     * 创建套接字流信息
+     *
+     * @var string
+     */
+    protected string $errorMessage = '';
+
+    /**
      * @inheritDoc
      */
     public function addSubscriber(string $class): bool
@@ -77,9 +91,9 @@ abstract class Client implements ClientInterface
     {
         if ($this->socket === null) {
             $socketAddress = $this->getSocketAddress();
-            $this->socket = $this->openConnection($socketAddress, $errno, $errStr, static::$timeout, static::$flags);
+            $this->socket = $this->openConnection($socketAddress, $this->errorNumber, $this->errorMessage, static::$timeout, static::$flags);
             if ($this->socket === null) {
-                throw new ClientConnectedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
+                throw new ClientConnectedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $this->errorNumber, $this->errorMessage));
             }
         }
     }

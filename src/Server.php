@@ -31,6 +31,20 @@ abstract class Server implements ServerInterface
     protected static int $flags = STREAM_SERVER_BIND | STREAM_SERVER_LISTEN;
 
     /**
+     * 创建套接字流误号
+     *
+     * @var int
+     */
+    protected int $errorNumber = 0;
+
+    /**
+     * 创建套接字流信息
+     *
+     * @var string
+     */
+    protected string $errorMessage = '';
+
+    /**
      * 资源流上下文配置
      *
      * @var array[]
@@ -172,10 +186,9 @@ abstract class Server implements ServerInterface
             $socketAddress = self::getSocketAddress();
             $context = stream_context_create($this->contextOptions);
 
-            $this->socket = stream_socket_server($socketAddress, $errno, $errStr, static::$flags, $context) ?: null;
-
+            $this->socket = stream_socket_server($socketAddress, $this->errorNumber, $this->errorMessage, static::$flags, $context) ?: null;
             if ($this->socket === null) {
-                throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
+                throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $this->errorNumber, $this->errorMessage));
             }
 
             stream_set_blocking($this->socket, false);
