@@ -172,8 +172,11 @@ abstract class Server implements ServerInterface
             $socketAddress = self::getSocketAddress();
             $context = stream_context_create($this->contextOptions);
 
-            $this->socket = stream_socket_server($socketAddress, $errno, $errStr, static::$flags, $context)
-                || throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
+            $this->socket = stream_socket_server($socketAddress, $errno, $errStr, static::$flags, $context) ?: null;
+
+            if ($this->socket === null) {
+                throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
+            }
 
             stream_set_blocking($this->socket, false);
         }

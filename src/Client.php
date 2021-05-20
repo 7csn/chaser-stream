@@ -77,8 +77,10 @@ abstract class Client implements ClientInterface
     {
         if ($this->socket === null) {
             $socketAddress = $this->getSocketAddress();
-            $this->socket = $this->openConnection($socketAddress, $errno, $errStr, static::$timeout, static::$flags)
-                || throw new ClientConnectedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
+            $this->socket = $this->openConnection($socketAddress, $errno, $errStr, static::$timeout, static::$flags);
+            if ($this->socket === null) {
+                throw new ClientConnectedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
+            }
         }
     }
 
