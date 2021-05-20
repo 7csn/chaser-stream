@@ -14,20 +14,6 @@ use chaser\stream\interfaces\ServerInterface;
 class ServerSubscriber extends Subscriber
 {
     /**
-     * IoC 容器
-     *
-     * @var ContainerInterface
-     */
-    protected ContainerInterface $container;
-
-    /**
-     * 服务器
-     *
-     * @var ServerInterface
-     */
-    protected ServerInterface $server;
-
-    /**
      * @inheritDoc
      */
     public static function events(): array
@@ -45,10 +31,8 @@ class ServerSubscriber extends Subscriber
      * @param ContainerInterface $container
      * @param ServerInterface $server
      */
-    public function __construct(ContainerInterface $container, ServerInterface $server)
+    public function __construct(protected ContainerInterface $container, protected ServerInterface $server)
     {
-        $this->container = $container;
-        $this->server = $server;
     }
 
     /**

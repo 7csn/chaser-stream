@@ -25,7 +25,7 @@ trait Communication
      *
      * @var string
      */
-    private string $remoteAddress;
+    protected string $remoteAddress;
 
     /**
      * @inheritDoc
