@@ -3,8 +3,7 @@
 namespace chaser\stream\traits;
 
 use chaser\container\ContainerInterface;
-use chaser\container\exception\NotFoundException;
-use chaser\container\exception\ResolvedException;
+use chaser\container\exception\{NotFoundException, ResolvedException};
 use chaser\event\Dispatcher;
 use chaser\reactor\Driver;
 use chaser\stream\events\SocketClose;
@@ -15,8 +14,6 @@ use Throwable;
  * 公共特性（容器、属性配置、事件驱动、事件调度、套接字流）
  *
  * @package chaser\stream\traits
- *
- * @property array $configurations
  *
  * @see CommonInterface
  */
@@ -44,11 +41,52 @@ trait Common
     protected Dispatcher $dispatcher;
 
     /**
+     * 常规配置
+     *
+     * @var array
+     */
+    protected array $configurations = [];
+
+    /**
      * 主套接字流
      *
      * @var resource|null
      */
     protected $socket;
+
+    /**
+     * 获取最初属性配置
+     *
+     * @return array
+     */
+    abstract protected function configurations(): array;
+
+    /**
+     * @inheritDoc
+     */
+    public function addSubscriber(string $class): bool
+    {
+        try {
+            $object = $this->container->make($class, [$this->container, $this]);
+        } catch (NotFoundException | ResolvedException) {
+            return false;
+        }
+
+        $subscriber = static::subscriber();
+        $able = $object instanceof $subscriber;
+        if ($able) {
+            $this->dispatcher->addSubscriber($object);
+        }
+        return $able;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function invalid(): bool
+    {
+        return !is_resource($this->socket) || feof($this->socket);
+    }
 
     /**
      * @inheritDoc
@@ -74,38 +112,13 @@ trait Common
     }
 
     /**
-     * @inheritDoc
+     * 初始化公共部分信息
      */
-    public function invalid(): bool
-    {
-        return !is_resource($this->socket) || feof($this->socket);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function addSubscriber(string $class): bool
-    {
-        try {
-            $object = $this->container->make($class, [$this->container, $this]);
-        } catch (NotFoundException | ResolvedException) {
-            return false;
-        }
-
-        $subscriber = static::subscriber();
-        $able = $object instanceof $subscriber;
-        if ($able) {
-            $this->dispatcher->addSubscriber($object);
-        }
-        return $able;
-    }
-
-    /**
-     * 初始化事件调度器
-     */
-    protected function initEventDispatcher(): void
+    protected function initCommon(): void
     {
         $this->dispatcher = new Dispatcher();
+
+        $this->setConfigurations($this->configurations());
     }
 
     /**
@@ -126,14 +139,6 @@ trait Common
     }
 
     /**
-     * 清空分发事件及监听
-     */
-    protected function dispatchClear(): void
-    {
-        $this->dispatcher->clear();
-    }
-
-    /**
      * 关闭套接字资源
      */
     protected function closeSocket(): void
@@ -148,12 +153,12 @@ trait Common
     /**
      * 添加读事件侦听到事件循环
      *
-     * @param callable $callback
+     * @param string $method
      * @return bool
      */
-    protected function addReadReactor(callable $callback): bool
+    protected function addReadReact(string $method): bool
     {
-        return $this->reactor->addRead($this->socket, $callback);
+        return $this->reactor->addRead($this->socket, [$this, $method]);
     }
 
     /**
@@ -161,8 +166,39 @@ trait Common
      *
      * @return bool
      */
-    protected function delReadReactor(): bool
+    protected function delReadReact(): bool
     {
         return $this->reactor->delRead($this->socket);
+    }
+
+    /**
+     * 添加写事件侦听到事件循环
+     *
+     * @param string $method
+     * @return bool
+     */
+    protected function addWriteReact(string $method): bool
+    {
+        return $this->reactor->addWrite($this->socket, [$this, $method]);
+    }
+
+    /**
+     * 从事件循环中移除写事件侦听
+     *
+     * @return bool
+     */
+    protected function delWriteReact(): bool
+    {
+        return $this->reactor->delWrite($this->socket);
+    }
+
+    /**
+     * 内部批量配置属性
+     *
+     * @param array $options
+     */
+    protected function setConfigurations(array $options): void
+    {
+        $this->configurations = array_merge($this->configurations, $options);
     }
 }

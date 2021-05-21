@@ -5,14 +5,9 @@ namespace chaser\stream;
 use chaser\container\ContainerInterface;
 use chaser\reactor\Driver;
 use chaser\stream\events\ServerStart;
-use chaser\stream\exceptions\ServerCreatedException;
-use chaser\stream\exceptions\ServerPauseAcceptException;
-use chaser\stream\exceptions\ServerResumeAcceptException;
+use chaser\stream\exceptions\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
 use chaser\stream\interfaces\ServerInterface;
-use chaser\stream\subscribers\ServerSubscriber;
-use chaser\stream\traits\Common;
-use chaser\stream\traits\Context;
-use chaser\stream\traits\Service;
+use chaser\stream\traits\{Common, Context, Service};
 
 /**
  * 流服务器类
@@ -29,31 +24,6 @@ abstract class Server implements ServerInterface
      * @var int
      */
     protected static int $flags = STREAM_SERVER_BIND | STREAM_SERVER_LISTEN;
-
-    /**
-     * 创建套接字流误号
-     *
-     * @var int
-     */
-    protected int $errorNumber = 0;
-
-    /**
-     * 创建套接字流信息
-     *
-     * @var string
-     */
-    protected string $errorMessage = '';
-
-    /**
-     * 资源流上下文配置
-     *
-     * @var array[]
-     */
-    protected array $contextOptions = [
-        'socket' => [
-            'backlog' => self::BACKLOG
-        ]
-    ];
 
     /**
      * 监听地址
@@ -77,14 +47,6 @@ abstract class Server implements ServerInterface
     private bool $stopping = false;
 
     /**
-     * @inheritDoc
-     */
-    public static function subscriber(): string
-    {
-        return ServerSubscriber::class;
-    }
-
-    /**
      * 构造函数
      *
      * @param ContainerInterface $container
@@ -97,7 +59,9 @@ abstract class Server implements ServerInterface
         $this->reactor = $reactor;
         $this->target = $target;
 
-        $this->initEventDispatcher();
+        $this->initCommon();
+
+        $this->contextualize(['socket' => ['backlog' => self::BACKLOG]]);
     }
 
     /**
@@ -139,7 +103,17 @@ abstract class Server implements ServerInterface
     public function __destruct()
     {
         $this->unListen();
-        $this->dispatchClear();
+        $this->dispatcher->clear();
+    }
+
+    /**
+     * 获取最初属性配置
+     *
+     * @return array
+     */
+    protected function configurations(): array
+    {
+        return ['contextOptions' => []];
     }
 
     /**
@@ -184,11 +158,12 @@ abstract class Server implements ServerInterface
     {
         if ($this->socket === null) {
             $socketAddress = self::getSocketAddress();
-            $context = stream_context_create($this->contextOptions);
-
-            $this->socket = stream_socket_server($socketAddress, $this->errorNumber, $this->errorMessage, static::$flags, $context) ?: null;
+            $errno = 0;
+            $errStr = '';
+            $context = $this->getContext();
+            $this->socket = stream_socket_server($socketAddress, $errno, $errStr, static::$flags, $context) ?: null;
             if ($this->socket === null) {
-                throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $this->errorNumber, $this->errorMessage));
+                throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
             }
 
             stream_set_blocking($this->socket, false);
@@ -203,7 +178,7 @@ abstract class Server implements ServerInterface
     private function resumeAccept(): void
     {
         if ($this->socket && $this->accepting === false) {
-            $this->addReadReactor([$this, 'acceptData'])
+            $this->addReadReact('accept')
                 ? $this->accepting = true
                 : throw new ServerResumeAcceptException(sprintf('Server[%s] resume accept failed.', $this->getSocketAddress()));
         }
@@ -217,7 +192,7 @@ abstract class Server implements ServerInterface
     private function pauseAccept(): void
     {
         if ($this->socket && $this->accepting === true) {
-            $this->delReadReactor()
+            $this->delReadReact()
                 ? $this->accepting = false
                 : throw new ServerPauseAcceptException(sprintf('Server[%s] pause accept failed.', $this->getSocketAddress()));
         }

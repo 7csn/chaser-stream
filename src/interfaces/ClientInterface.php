@@ -2,9 +2,7 @@
 
 namespace chaser\stream\interfaces;
 
-use chaser\stream\interfaces\parts\CommonInterface;
-use chaser\stream\interfaces\parts\CommunicationInterface;
-use chaser\stream\interfaces\parts\ServiceInterface;
+use chaser\stream\interfaces\parts\{CommonInterface, CommunicationInterface, ServiceInterface};
 
 /**
  * 流客户端接口

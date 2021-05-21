@@ -9,6 +9,6 @@ use Exception;
  *
  * @package chaser\stream\exceptions
  */
-class ClientConnectedException extends Exception implements ExceptionInterface
+class ClientCreatedException extends Exception implements ExceptionInterface
 {
 }

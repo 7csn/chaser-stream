@@ -4,12 +4,9 @@ namespace chaser\stream;
 
 use chaser\container\ContainerInterface;
 use chaser\reactor\Driver;
-use chaser\stream\exceptions\ClientConnectedException;
+use chaser\stream\exceptions\ClientCreatedException;
 use chaser\stream\interfaces\ClientInterface;
-use chaser\stream\subscribers\ClientSubscriber;
-use chaser\stream\traits\Common;
-use chaser\stream\traits\Communication;
-use chaser\stream\traits\Service;
+use chaser\stream\traits\{Common, Communication, Service};
 
 /**
  * 流客户端类
@@ -35,30 +32,6 @@ abstract class Client implements ClientInterface
     protected static int $timeout = 0;
 
     /**
-     * 创建套接字流误号
-     *
-     * @var int
-     */
-    protected int $errorNumber = 0;
-
-    /**
-     * 创建套接字流信息
-     *
-     * @var string
-     */
-    protected string $errorMessage = '';
-
-    /**
-     * 有效订阅者类型
-     *
-     * @return string
-     */
-    public static function subscriber(): string
-    {
-        return ClientSubscriber::class;
-    }
-
-    /**
      * 构造函数
      *
      * @param ContainerInterface $container
@@ -71,7 +44,7 @@ abstract class Client implements ClientInterface
         $this->reactor = $reactor;
         $this->remoteAddress = $target;
 
-        $this->initEventDispatcher();
+        $this->initCommon();
     }
 
     /**
@@ -87,21 +60,23 @@ abstract class Client implements ClientInterface
     /**
      * 创建客户端套接字流
      *
-     * @throws ClientConnectedException
+     * @throws ClientCreatedException
      */
     public function create(): void
     {
         if ($this->socket === null) {
             $socketAddress = $this->getSocketAddress();
-            $this->socket = $this->openConnection($socketAddress, $this->errorNumber, $this->errorMessage, static::$timeout, static::$flags);
+            $errorNumber = 0;
+            $errorMessage = '';
+            $this->socket = $this->createSocket($socketAddress, $errorNumber, $errorMessage, static::$timeout, static::$flags);
             if ($this->socket === null) {
-                throw new ClientConnectedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $this->errorNumber, $this->errorMessage));
+                throw new ClientCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errorNumber, $errorMessage));
             }
         }
     }
 
     /**
-     * 打开到服务器套接字流的连接
+     * 打开到服务器的套接字连接
      *
      * @param string $address
      * @param int $errno
@@ -110,8 +85,9 @@ abstract class Client implements ClientInterface
      * @param int $flags
      * @return resource|null
      */
-    protected function openConnection(string $address, int &$errno, string &$errStr, int $timeout, int $flags)
+    protected function createSocket(string $address, int &$errno, string &$errStr, int $timeout, int $flags)
     {
-        return stream_socket_client($address, $errno, $errStr, $timeout, $flags) ?: null;
+        $socket = stream_socket_client($address, $errno, $errStr, $timeout, $flags);
+        return $socket === false ? null : $socket;
     }
 }

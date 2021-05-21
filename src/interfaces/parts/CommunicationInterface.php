@@ -26,12 +26,12 @@ interface CommunicationInterface
     /**
      * 建立连接
      */
-    public function connect();
+    public function connect(): void;
 
     /**
      * 接收数据
      */
-    public function receive();
+    public function receive(): void;
 
     /**
      * 发送数据

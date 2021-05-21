@@ -2,12 +2,8 @@
 
 namespace chaser\stream\interfaces;
 
-use chaser\stream\exceptions\ServerCreatedException;
-use chaser\stream\exceptions\ServerPauseAcceptException;
-use chaser\stream\exceptions\ServerResumeAcceptException;
-use chaser\stream\interfaces\parts\CommonInterface;
-use chaser\stream\interfaces\parts\ContextInterface;
-use chaser\stream\interfaces\parts\ServiceInterface;
+use chaser\stream\exceptions\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
+use chaser\stream\interfaces\parts\{CommonInterface, ContextInterface, ServiceInterface};
 
 /**
  * 流服务器接口
@@ -28,6 +24,11 @@ interface ServerInterface extends CommonInterface, ContextInterface, ServiceInte
      * @throws ServerResumeAcceptException
      */
     public function start(): void;
+
+    /**
+     * 接受客户端连接/数据
+     */
+    public function accept(): void;
 
     /**
      * 停止服务器
