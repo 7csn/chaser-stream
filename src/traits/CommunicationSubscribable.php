@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace chaser\stream\traits;
 
+use chaser\stream\interfaces\SubscriberInterface;
 use chaser\stream\events\{SocketClose, Connect, Message};
 
 /**
  * 通信事件订阅特征
  *
  * @package chaser\stream\traits
+ *
+ * @see SubscriberInterface
  */
 trait CommunicationSubscribable
 {
