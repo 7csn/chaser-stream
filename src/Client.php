@@ -64,6 +64,8 @@ abstract class Client implements ClientInterface
      */
     public function create(): void
     {
+        $this->internalSubscription();
+
         if ($this->socket === null) {
             $socketAddress = $this->getSocketAddress();
             $errorNumber = 0;

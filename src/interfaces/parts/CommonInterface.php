@@ -25,6 +25,13 @@ interface CommonInterface
     public function addSubscriber(string $class): bool;
 
     /**
+     * 返回初始配置属性数组
+     *
+     * @return array
+     */
+    public function configurations(): array;
+
+    /**
      * 批量配置属性
      *
      * @param array $options

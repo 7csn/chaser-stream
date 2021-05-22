@@ -16,7 +16,11 @@ use chaser\stream\traits\{Common, Context, Service};
  */
 abstract class Server implements ServerInterface
 {
-    use Common, Context, Service;
+    use Common {
+        configurations as commonConfigurations;
+    }
+
+    use Context, Service;
 
     /**
      * 监听网络标志组合
@@ -77,8 +81,17 @@ abstract class Server implements ServerInterface
     /**
      * @inheritDoc
      */
+    public function configurations(): array
+    {
+        return ['context' => []] + $this->commonConfigurations();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function start(): void
     {
+        $this->internalSubscription();
         $this->listen();
         $this->dispatch(ServerStart::class);
         $this->reactor->loop();
@@ -104,16 +117,6 @@ abstract class Server implements ServerInterface
     {
         $this->unListen();
         $this->dispatcher->clear();
-    }
-
-    /**
-     * 获取最初属性配置
-     *
-     * @return array
-     */
-    protected function configurations(): array
-    {
-        return ['context' => []];
     }
 
     /**

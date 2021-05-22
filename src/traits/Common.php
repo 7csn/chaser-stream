@@ -15,6 +15,8 @@ use Throwable;
  *
  * @package chaser\stream\traits
  *
+ * @property string $subscriber
+ *
  * @see CommonInterface
  */
 trait Common
@@ -55,17 +57,14 @@ trait Common
     protected $socket;
 
     /**
-     * 获取最初属性配置
-     *
-     * @return array
-     */
-    abstract protected function configurations(): array;
-
-    /**
      * @inheritDoc
      */
     public function addSubscriber(string $class): bool
     {
+        if ($class === '') {
+            return false;
+        }
+
         try {
             $object = $this->container->make($class, [$this->container, $this]);
         } catch (NotFoundException | ResolvedException) {
@@ -86,6 +85,14 @@ trait Common
     public function invalid(): bool
     {
         return !is_resource($this->socket) || feof($this->socket);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function configurations(): array
+    {
+        return ['subscriber' => ''];
     }
 
     /**
@@ -119,6 +126,17 @@ trait Common
         $this->dispatcher = new Dispatcher();
 
         $this->setConfigurations($this->configurations());
+    }
+
+    /**
+     * 内部添加事件订阅者
+     */
+    protected function internalSubscription(): void
+    {
+        if ($this->subscriber !== '') {
+            $this->addSubscriber($this->subscriber);
+            $this->subscriber = '';
+        }
     }
 
     /**
