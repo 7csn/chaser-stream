@@ -113,7 +113,7 @@ abstract class Server implements ServerInterface
      */
     protected function configurations(): array
     {
-        return ['contextOptions' => []];
+        return ['context' => []];
     }
 
     /**
