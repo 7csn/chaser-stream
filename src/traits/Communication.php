@@ -40,7 +40,7 @@ trait Communication
      */
     public function getRemoteAddress(): string
     {
-        return $this->remoteAddress;
+        return $this->remoteAddress ??= (string)stream_socket_get_name($this->socket, true);
     }
 
     /**
