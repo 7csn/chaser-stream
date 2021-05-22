@@ -172,27 +172,6 @@ trait Common
     }
 
     /**
-     * 添加写事件侦听到事件循环
-     *
-     * @param string $method
-     * @return bool
-     */
-    protected function addWriteReact(string $method): bool
-    {
-        return $this->reactor->addWrite($this->socket, [$this, $method]);
-    }
-
-    /**
-     * 从事件循环中移除写事件侦听
-     *
-     * @return bool
-     */
-    protected function delWriteReact(): bool
-    {
-        return $this->reactor->delWrite($this->socket);
-    }
-
-    /**
      * 内部批量配置属性
      *
      * @param array $options
