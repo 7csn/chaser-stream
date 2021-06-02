@@ -51,7 +51,7 @@ abstract class Server implements ServerInterface
     private bool $stopping = false;
 
     /**
-     * 构造函数
+     * 构造方法
      *
      * @param ContainerInterface $container
      * @param Driver $reactor

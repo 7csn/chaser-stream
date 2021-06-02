@@ -40,7 +40,7 @@ abstract class Client implements ClientInterface
     protected string $target;
 
     /**
-     * 构造函数
+     * 构造方法
      *
      * @param ContainerInterface $container
      * @param Driver $reactor
