@@ -54,7 +54,7 @@ trait Common
      *
      * @var resource|null
      */
-    protected $socket;
+    protected $socket = null;
 
     /**
      * @inheritDoc
