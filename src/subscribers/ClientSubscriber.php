@@ -21,7 +21,7 @@ class ClientSubscriber extends Subscriber
      */
     public static function events(): array
     {
-        return [Ready::class => 'ready'] + CommunicationSubscribable::events();
+        return [Ready::class => 'ready'] + CommunicationSubscribable::events() + parent::events();
     }
 
     /**

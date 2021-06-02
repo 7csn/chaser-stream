@@ -18,7 +18,7 @@ class ServerSubscriber extends Subscriber
      */
     public static function events(): array
     {
-        return [Start::class => 'start', Stop::class => 'stop'];
+        return [Start::class => 'start', Stop::class => 'stop'] + parent::events();
     }
 
     /**

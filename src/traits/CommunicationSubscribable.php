@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace chaser\stream\traits;
 
 use chaser\stream\interfaces\SubscriberInterface;
-use chaser\stream\events\{Close, Message};
+use chaser\stream\events\Message;
 
 /**
  * 通信事件订阅特征
@@ -21,16 +21,7 @@ trait CommunicationSubscribable
      */
     public static function events(): array
     {
-        return [Close::class => 'close', Message::class => 'message'];
-    }
-
-    /**
-     * 关闭事件响应
-     *
-     * @param Close $event
-     */
-    public function close(Close $event): void
-    {
+        return [Message::class => 'message'];
     }
 
     /**
