@@ -12,7 +12,7 @@ use Stringable;
  *
  * @package chaser\stream\events
  *
- * @property-read Stringable $message
+ * @property-read Stringable|string $message
  */
 class Message
 {
@@ -21,9 +21,9 @@ class Message
     /**
      * 初始化消息
      *
-     * @param Stringable $message
+     * @param Stringable|string $message
      */
-    public function __construct(private Stringable $message)
+    public function __construct(private Stringable|string $message)
     {
     }
 }
