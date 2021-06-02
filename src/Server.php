@@ -4,7 +4,7 @@ namespace chaser\stream;
 
 use chaser\container\ContainerInterface;
 use chaser\reactor\Driver;
-use chaser\stream\events\ServerStart;
+use chaser\stream\events\Start;
 use chaser\stream\exceptions\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
 use chaser\stream\interfaces\ServerInterface;
 use chaser\stream\traits\{Common, Context, Service};
@@ -37,7 +37,7 @@ abstract class Server implements ServerInterface
     private string $target;
 
     /**
-     * 接收状态
+     * 是否处于接收中
      *
      * @var bool
      */
@@ -91,9 +91,8 @@ abstract class Server implements ServerInterface
      */
     public function start(): void
     {
-        $this->internalSubscription();
         $this->listen();
-        $this->dispatch(ServerStart::class);
+        $this->dispatch(Start::class);
         $this->reactor->loop();
     }
 
@@ -159,6 +158,8 @@ abstract class Server implements ServerInterface
      */
     private function create(): void
     {
+        $this->internalSubscription();
+
         if ($this->socket === null) {
             $socketAddress = self::getSocketAddress();
             $errno = 0;
@@ -181,7 +182,7 @@ abstract class Server implements ServerInterface
     private function resumeAccept(): void
     {
         if ($this->socket && $this->accepting === false) {
-            $this->addReadReact('accept')
+            $this->addReadReact([$this, 'accept'])
                 ? $this->accepting = true
                 : throw new ServerResumeAcceptException(sprintf('Server[%s] resume accept failed.', $this->getSocketAddress()));
         }

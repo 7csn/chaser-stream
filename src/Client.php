@@ -4,6 +4,7 @@ namespace chaser\stream;
 
 use chaser\container\ContainerInterface;
 use chaser\reactor\Driver;
+use chaser\stream\events\Ready;
 use chaser\stream\exceptions\ClientCreatedException;
 use chaser\stream\interfaces\ClientInterface;
 use chaser\stream\traits\{Common, Communication, Service};
@@ -32,6 +33,13 @@ abstract class Client implements ClientInterface
     protected static int $timeout = 0;
 
     /**
+     * 监听地址
+     *
+     * @var string
+     */
+    protected string $target;
+
+    /**
      * 构造函数
      *
      * @param ContainerInterface $container
@@ -42,7 +50,7 @@ abstract class Client implements ClientInterface
     {
         $this->container = $container;
         $this->reactor = $reactor;
-        $this->remoteAddress = $target;
+        $this->target = $target;
 
         $this->initCommon();
     }
@@ -54,7 +62,7 @@ abstract class Client implements ClientInterface
      */
     public function getTarget(): string
     {
-        return $this->remoteAddress;
+        return $this->target;
     }
 
     /**
@@ -62,7 +70,7 @@ abstract class Client implements ClientInterface
      *
      * @throws ClientCreatedException
      */
-    public function create(): void
+    protected function create(): void
     {
         $this->internalSubscription();
 
@@ -91,5 +99,14 @@ abstract class Client implements ClientInterface
     {
         $socket = stream_socket_client($address, $errno, $errStr, $timeout, $flags);
         return $socket === false ? null : $socket;
+    }
+
+    /**
+     * 准备通信完成处理
+     */
+    protected function readyHandle(): void
+    {
+        $this->addReadReact([$this, 'receive']);
+        $this->dispatch(Ready::class);
     }
 }

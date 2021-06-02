@@ -3,7 +3,7 @@
 namespace chaser\stream\subscribers;
 
 use chaser\container\ContainerInterface;
-use chaser\stream\events\{SocketClose, ServerStart, ServerStop};
+use chaser\stream\events\{Start, Stop};
 use chaser\stream\interfaces\ServerInterface;
 
 /**
@@ -18,11 +18,7 @@ class ServerSubscriber extends Subscriber
      */
     public static function events(): array
     {
-        return [
-            ServerStart::class => 'start',
-            ServerStop::class => 'stop',
-            SocketClose::class => 'close'
-        ];
+        return [Start::class => 'start', Stop::class => 'stop'];
     }
 
     /**
@@ -38,27 +34,18 @@ class ServerSubscriber extends Subscriber
     /**
      * 启动事件响应
      *
-     * @param ServerStart $event
+     * @param Start $event
      */
-    public function start(ServerStart $event): void
+    public function start(Start $event): void
     {
     }
 
     /**
      * 停止事件响应
      *
-     * @param ServerStop $event
+     * @param Stop $event
      */
-    public function stop(ServerStop $event): void
-    {
-    }
-
-    /**
-     * 关闭流资源事件响应
-     *
-     * @param SocketClose $event
-     */
-    public function close(SocketClose $event): void
+    public function stop(Stop $event): void
     {
     }
 }

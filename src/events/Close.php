@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace chaser\stream\events;
 
 /**
- * 服务器启动事件类
+ * 关闭通信连接事件类
  *
  * @package chaser\stream\events
  */
-class ServerStart
+class Close
 {
 }

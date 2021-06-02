@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace chaser\stream\traits;
 
 use chaser\stream\interfaces\SubscriberInterface;
-use chaser\stream\events\{SocketClose, Connect, Message};
+use chaser\stream\events\{Close, Message};
 
 /**
  * 通信事件订阅特征
@@ -21,28 +21,15 @@ trait CommunicationSubscribable
      */
     public static function events(): array
     {
-        return [
-            SocketClose::class => 'close',
-            Connect::class => 'connect',
-            Message::class => 'message'
-        ];
+        return [Close::class => 'close', Message::class => 'message'];
     }
 
     /**
      * 关闭事件响应
      *
-     * @param SocketClose $event
+     * @param Close $event
      */
-    public function close(SocketClose $event): void
-    {
-    }
-
-    /**
-     * 连接事件响应
-     *
-     * @param Connect $event
-     */
-    public function connect(Connect $event): void
+    public function close(Close $event): void
     {
     }
 

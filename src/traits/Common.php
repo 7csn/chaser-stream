@@ -6,7 +6,7 @@ use chaser\container\ContainerInterface;
 use chaser\container\exception\{NotFoundException, ResolvedException};
 use chaser\event\Dispatcher;
 use chaser\reactor\Driver;
-use chaser\stream\events\SocketClose;
+use chaser\stream\events\Close;
 use chaser\stream\interfaces\parts\CommonInterface;
 use Throwable;
 
@@ -164,19 +164,19 @@ trait Common
         if (is_resource($this->socket)) {
             fclose($this->socket);
             $this->socket = null;
-            $this->dispatch(SocketClose::class);
+            $this->dispatch(Close::class);
         }
     }
 
     /**
      * 添加读事件侦听到事件循环
      *
-     * @param string $method
+     * @param callable $callback
      * @return bool
      */
-    protected function addReadReact(string $method): bool
+    protected function addReadReact(callable $callback): bool
     {
-        return $this->reactor->addRead($this->socket, [$this, $method]);
+        return $this->reactor->addRead($this->socket, $callback);
     }
 
     /**

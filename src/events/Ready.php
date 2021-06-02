@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 namespace chaser\stream\events;
 
 /**
- * 通信连接事件类
+ * 客户端准备通信事件类
  *
  * @package chaser\stream\events
  */
-class Connect
+class Ready
 {
 }

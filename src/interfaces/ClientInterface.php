@@ -2,6 +2,7 @@
 
 namespace chaser\stream\interfaces;
 
+use chaser\stream\exceptions\ClientCreatedException;
 use chaser\stream\interfaces\parts\{CommonInterface, CommunicationInterface, ServiceInterface};
 
 /**
@@ -11,4 +12,10 @@ use chaser\stream\interfaces\parts\{CommonInterface, CommunicationInterface, Ser
  */
 interface ClientInterface extends CommonInterface, CommunicationInterface, ServiceInterface
 {
+    /**
+     * 准备工作
+     *
+     * @throws ClientCreatedException
+     */
+    public function ready(): void;
 }

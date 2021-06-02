@@ -35,6 +35,22 @@ trait Context
      */
     protected function getContext()
     {
-        return empty($this->contextOptions) ? null : stream_context_create($this->contextOptions);
+        $options = $this->getContextOptions();
+        return empty($options) ? null : stream_context_create($options);
+    }
+
+    /**
+     * 获取绑定上下文配置
+     *
+     * @return array
+     */
+    protected function getContextOptions(): array
+    {
+        if (!empty($this->context)) {
+            $this->contextualize($this->context);
+            $this->configure(['context' => []]);
+        }
+
+        return $this->contextOptions;
     }
 }

@@ -8,7 +8,7 @@ use chaser\stream\traits\PropertyReadable;
 use Stringable;
 
 /**
- * 消息事件类
+ * 通信消息事件类
  *
  * @package chaser\stream\events
  *
