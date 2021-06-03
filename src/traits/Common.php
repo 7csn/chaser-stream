@@ -13,11 +13,17 @@ use chaser\stream\interfaces\part\CommonInterface;
 use Throwable;
 
 /**
- * 公共特性（容器、属性配置、事件驱动、事件调度、套接字流）
+ * 公共特性（容器、属性配置、事件调度、事件驱动、套接字流）
  *
  * @package chaser\stream\traits
  *
- * @property string $subscriber
+ * @property-read ContainerInterface $container
+ * @property-read Driver $reactor
+ * @property-read Dispatcher $dispatcher
+ * @property-read resource|null $socket
+ * @property-read array $configurations
+ *
+ * @property-read string $subscriber
  *
  * @see CommonInterface
  */
@@ -45,13 +51,6 @@ trait Common
     protected Dispatcher $dispatcher;
 
     /**
-     * 常规配置
-     *
-     * @var array
-     */
-    protected array $configurations = [];
-
-    /**
      * 主套接字流
      *
      * @var resource|null
@@ -59,40 +58,16 @@ trait Common
     protected $socket = null;
 
     /**
-     * @inheritDoc
+     * 常规配置
+     *
+     * @var array
      */
-    public function addSubscriber(string $class): bool
-    {
-        if ($class === '') {
-            return false;
-        }
-
-        try {
-            $object = $this->container->make($class, [$this->container, $this]);
-        } catch (NotFoundException | ResolvedException) {
-            return false;
-        }
-
-        $subscriber = static::subscriber();
-        $able = $object instanceof $subscriber;
-        if ($able) {
-            $this->dispatcher->addSubscriber($object);
-        }
-        return $able;
-    }
+    protected array $configurations = [];
 
     /**
      * @inheritDoc
      */
-    public function invalid(): bool
-    {
-        return !is_resource($this->socket) || feof($this->socket);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function configurations(): array
+    public static function configurations(): array
     {
         return ['subscriber' => ''];
     }
@@ -118,6 +93,37 @@ trait Common
     public function __get(string $name): mixed
     {
         return $this->{$name} ?? $this->configurations[$name] ?? null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addSubscriber(string $class): bool
+    {
+        if ($class === '') {
+            return false;
+        }
+
+        try {
+            $object = $this->container->make($class, [$this]);
+        } catch (NotFoundException | ResolvedException) {
+            return false;
+        }
+
+        $subscriber = static::subscriber();
+        $able = $object instanceof $subscriber;
+        if ($able) {
+            $this->dispatcher->addSubscriber($object);
+        }
+        return $able;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function invalid(): bool
+    {
+        return !is_resource($this->socket) || feof($this->socket);
     }
 
     /**

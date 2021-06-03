@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace chaser\stream\subscriber;
 
-use chaser\container\ContainerInterface;
 use chaser\stream\event\Ready;
 use chaser\stream\interfaces\ClientInterface;
 use chaser\stream\traits\CommunicationSubscribable;
@@ -29,10 +28,9 @@ class ClientSubscriber extends Subscriber
     /**
      * 构造方法
      *
-     * @param ContainerInterface $container
      * @param ClientInterface $client
      */
-    public function __construct(protected ContainerInterface $container, protected ClientInterface $client)
+    public function __construct(protected ClientInterface $client)
     {
     }
 

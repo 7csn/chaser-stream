@@ -18,11 +18,7 @@ use chaser\stream\traits\{Common, Context, Service};
  */
 abstract class Server implements ServerInterface
 {
-    use Common {
-        configurations as commonConfigurations;
-    }
-
-    use Context, Service;
+    use Common, Context, Service;
 
     /**
      * 监听网络标志组合
@@ -39,6 +35,13 @@ abstract class Server implements ServerInterface
     private string $target;
 
     /**
+     * 是否处于运行中
+     *
+     * @var bool
+     */
+    private bool $running = false;
+
+    /**
      * 是否处于接收中
      *
      * @var bool
@@ -46,11 +49,12 @@ abstract class Server implements ServerInterface
     private bool $accepting = false;
 
     /**
-     * 是否处于停止中
-     *
-     * @var bool
+     * @inheritDoc
      */
-    private bool $stopping = false;
+    public static function configurations(): array
+    {
+        return ['context' => []] + Common::configurations();
+    }
 
     /**
      * 构造方法
@@ -83,19 +87,14 @@ abstract class Server implements ServerInterface
     /**
      * @inheritDoc
      */
-    public function configurations(): array
-    {
-        return ['context' => []] + $this->commonConfigurations();
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function start(): void
     {
-        $this->listen();
-        $this->dispatch(Start::class);
-        $this->reactor->loop();
+        if ($this->running === false) {
+            $this->running = true;
+            $this->listen();
+            $this->dispatch(Start::class);
+            $this->reactor->loop();
+        }
     }
 
     /**
@@ -103,10 +102,10 @@ abstract class Server implements ServerInterface
      */
     public function stop(): void
     {
-        if ($this->stopping === false) {
+        if ($this->running) {
+            $this->running = false;
             $this->dispatch(Stop::class);
             $this->unListen();
-            $this->stopping = true;
         }
     }
 

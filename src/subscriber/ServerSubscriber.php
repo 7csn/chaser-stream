@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace chaser\stream\subscriber;
 
-use chaser\container\ContainerInterface;
 use chaser\stream\event\{Start, Stop};
 use chaser\stream\interfaces\ServerInterface;
 
@@ -26,10 +25,9 @@ class ServerSubscriber extends Subscriber
     /**
      * 构造方法
      *
-     * @param ContainerInterface $container
      * @param ServerInterface $server
      */
-    public function __construct(protected ContainerInterface $container, protected ServerInterface $server)
+    public function __construct(protected ServerInterface $server)
     {
     }
 
