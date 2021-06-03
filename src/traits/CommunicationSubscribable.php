@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace chaser\stream\traits;
 
-use chaser\stream\interfaces\SubscriberInterface;
 use chaser\stream\event\Message;
+use chaser\stream\interfaces\SubscriberInterface;
 
 /**
  * 通信事件订阅特征

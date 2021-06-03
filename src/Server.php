@@ -7,7 +7,7 @@ namespace chaser\stream;
 use chaser\container\ContainerInterface;
 use chaser\reactor\Driver;
 use chaser\stream\event\{Start, Stop};
-use chaser\stream\exception\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
+use chaser\stream\exception\ServerCreatedException;
 use chaser\stream\interfaces\ServerInterface;
 use chaser\stream\traits\{Common, Context, Service};
 
@@ -32,7 +32,7 @@ abstract class Server implements ServerInterface
      *
      * @var string
      */
-    private string $target;
+    protected string $target;
 
     /**
      * 是否处于运行中
@@ -111,8 +111,6 @@ abstract class Server implements ServerInterface
 
     /**
      * 析构函数：移除网络监听
-     *
-     * @throws ServerPauseAcceptException
      */
     public function __destruct()
     {
@@ -120,45 +118,11 @@ abstract class Server implements ServerInterface
     }
 
     /**
-     * 关闭服务器资源
-     */
-    protected function close(): void
-    {
-        if ($this->socket) {
-            $this->closeSocket();
-            $this->dispatcher->clear();
-        }
-    }
-
-    /**
      * 监听网络
      *
      * @throws ServerCreatedException
-     * @throws ServerResumeAcceptException
      */
-    private function listen(): void
-    {
-        $this->create();
-        $this->resumeAccept();
-    }
-
-    /**
-     * 移除网络监听
-     *
-     * @throws ServerPauseAcceptException
-     */
-    private function unListen(): void
-    {
-        $this->pauseAccept();
-        $this->close();
-    }
-
-    /**
-     * 创建服务器套接字流
-     *
-     * @throws ServerCreatedException
-     */
-    private function create(): void
+    protected function listen(): void
     {
         $this->internalSubscription();
 
@@ -171,36 +135,36 @@ abstract class Server implements ServerInterface
             if ($this->socket === null) {
                 throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
             }
-
-            stream_set_blocking($this->socket, false);
+            $this->socketHandle();
+            $this->addReadReact([$this, 'accept']);
         }
     }
 
     /**
-     * 开始或继续接收
-     *
-     * @throws ServerResumeAcceptException
+     * 移除网络监听
      */
-    private function resumeAccept(): void
+    protected function unListen(): void
     {
-        if ($this->socket && $this->accepting === false) {
-            $this->addReadReact([$this, 'accept'])
-                ? $this->accepting = true
-                : throw new ServerResumeAcceptException(sprintf('Server[%s] resume accept failed.', $this->getSocketAddress()));
+        if ($this->socket) {
+            $this->delReadReact();
+            $this->close();
         }
     }
 
     /**
-     * 暂停接收
-     *
-     * @throws ServerPauseAcceptException
+     * 关闭服务器资源
      */
-    private function pauseAccept(): void
+    protected function close(): void
     {
-        if ($this->socket && $this->accepting === true) {
-            $this->delReadReact()
-                ? $this->accepting = false
-                : throw new ServerPauseAcceptException(sprintf('Server[%s] pause accept failed.', $this->getSocketAddress()));
-        }
+        $this->closeSocket();
+        $this->dispatcher->clear();
+    }
+
+    /**
+     * 套接字资源处理
+     */
+    protected function socketHandle(): void
+    {
+        stream_set_blocking($this->socket, false);
     }
 }

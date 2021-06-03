@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace chaser\stream\interfaces;
 
-use chaser\stream\exception\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
+use chaser\stream\exception\ServerCreatedException;
 use chaser\stream\interfaces\part\{CommonInterface, ContextInterface, ServiceInterface};
 
 /**
@@ -23,7 +23,6 @@ interface ServerInterface extends CommonInterface, ContextInterface, ServiceInte
      * 启动服务器
      *
      * @throws ServerCreatedException
-     * @throws ServerResumeAcceptException
      */
     public function start(): void;
 
@@ -34,8 +33,6 @@ interface ServerInterface extends CommonInterface, ContextInterface, ServiceInte
 
     /**
      * 停止服务器
-     *
-     * @throws ServerPauseAcceptException
      */
     public function stop(): void;
 }
