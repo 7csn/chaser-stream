@@ -1,11 +1,13 @@
 <?php
 
-namespace chaser\stream\interfaces\parts;
+declare(strict_types=1);
+
+namespace chaser\stream\interfaces\part;
 
 /**
  * 流服务部分接口
  *
- * @package chaser\stream\interfaces\parts
+ * @package chaser\stream\interfaces\part
  */
 interface ServiceInterface
 {

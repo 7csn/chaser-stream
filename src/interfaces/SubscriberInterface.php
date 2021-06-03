@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream\interfaces;
 
 use chaser\event\SubscriberInterface as BaseSubscriberInterface;

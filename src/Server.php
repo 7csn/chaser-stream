@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream;
 
 use chaser\container\ContainerInterface;
 use chaser\reactor\Driver;
-use chaser\stream\events\Start;
-use chaser\stream\exceptions\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
+use chaser\stream\event\{Start, Stop};
+use chaser\stream\exception\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
 use chaser\stream\interfaces\ServerInterface;
 use chaser\stream\traits\{Common, Context, Service};
 
@@ -102,6 +104,7 @@ abstract class Server implements ServerInterface
     public function stop(): void
     {
         if ($this->stopping === false) {
+            $this->dispatch(Stop::class);
             $this->unListen();
             $this->stopping = true;
         }
@@ -115,7 +118,6 @@ abstract class Server implements ServerInterface
     public function __destruct()
     {
         $this->unListen();
-        $this->dispatcher->clear();
     }
 
     /**
@@ -125,6 +127,7 @@ abstract class Server implements ServerInterface
     {
         if ($this->socket) {
             $this->closeSocket();
+            $this->dispatcher->clear();
         }
     }
 

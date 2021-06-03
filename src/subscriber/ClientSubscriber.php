@@ -1,16 +1,18 @@
 <?php
 
-namespace chaser\stream\subscribers;
+declare(strict_types=1);
+
+namespace chaser\stream\subscriber;
 
 use chaser\container\ContainerInterface;
-use chaser\stream\events\Ready;
+use chaser\stream\event\Ready;
 use chaser\stream\interfaces\ClientInterface;
 use chaser\stream\traits\CommunicationSubscribable;
 
 /**
  * 流客户端事件订阅类
  *
- * @package chaser\stream\subscribers
+ * @package chaser\stream\subscriber
  */
 class ClientSubscriber extends Subscriber
 {

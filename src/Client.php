@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream;
 
 use chaser\container\ContainerInterface;
 use chaser\reactor\Driver;
-use chaser\stream\events\Ready;
-use chaser\stream\exceptions\ClientCreatedException;
+use chaser\stream\event\Ready;
+use chaser\stream\exception\ClientCreatedException;
 use chaser\stream\interfaces\ClientInterface;
 use chaser\stream\traits\{Common, Communication, Service};
 

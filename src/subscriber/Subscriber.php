@@ -1,15 +1,17 @@
 <?php
 
-namespace chaser\stream\subscribers;
+declare(strict_types=1);
+
+namespace chaser\stream\subscriber;
 
 use chaser\event\Listener;
-use chaser\stream\events\Close;
+use chaser\stream\event\Close;
 use chaser\stream\interfaces\SubscriberInterface;
 
 /**
  * 流服务事件订阅基类
  *
- * @package chaser\stream\subscribers
+ * @package chaser\stream\subscriber
  */
 abstract class Subscriber implements SubscriberInterface
 {
@@ -34,7 +36,7 @@ abstract class Subscriber implements SubscriberInterface
     }
 
     /**
-     * 关闭事件响应
+     * 关闭套接字资源事件响应
      *
      * @param Close $event
      */

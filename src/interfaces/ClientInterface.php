@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream\interfaces;
 
-use chaser\stream\exceptions\ClientCreatedException;
-use chaser\stream\interfaces\parts\{CommonInterface, CommunicationInterface, ServiceInterface};
+use chaser\stream\exception\ClientCreatedException;
+use chaser\stream\interfaces\part\{CommonInterface, CommunicationInterface, ServiceInterface};
 
 /**
  * 流客户端接口

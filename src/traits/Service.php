@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream\traits;
 
-use chaser\stream\interfaces\parts\ServiceInterface;
+use chaser\stream\interfaces\part\ServiceInterface;
 
 /**
  * 流服务特征

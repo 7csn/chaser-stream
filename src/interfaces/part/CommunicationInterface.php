@@ -1,11 +1,13 @@
 <?php
 
-namespace chaser\stream\interfaces\parts;
+declare(strict_types=1);
+
+namespace chaser\stream\interfaces\part;
 
 /**
  * 通信部分接口
  *
- * @package chaser\stream\interfaces\parts
+ * @package chaser\stream\interfaces\part
  */
 interface CommunicationInterface
 {
@@ -23,7 +25,7 @@ interface CommunicationInterface
     public function send(string $data): bool;
 
     /**
-     * 关闭套接字流资源
+     * 关闭通信连接
      */
     public function close(): void;
 }

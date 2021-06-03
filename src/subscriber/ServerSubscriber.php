@@ -1,15 +1,17 @@
 <?php
 
-namespace chaser\stream\subscribers;
+declare(strict_types=1);
+
+namespace chaser\stream\subscriber;
 
 use chaser\container\ContainerInterface;
-use chaser\stream\events\{Start, Stop};
+use chaser\stream\event\{Start, Stop};
 use chaser\stream\interfaces\ServerInterface;
 
 /**
  * 流服务器事件订阅类
  *
- * @package chaser\stream\subscribers
+ * @package chaser\stream\subscriber
  */
 class ServerSubscriber extends Subscriber
 {

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream\traits;
 
 use chaser\container\ContainerInterface;
 use chaser\container\exception\{NotFoundException, ResolvedException};
 use chaser\event\Dispatcher;
 use chaser\reactor\Driver;
-use chaser\stream\events\Close;
-use chaser\stream\interfaces\parts\CommonInterface;
+use chaser\stream\event\Close;
+use chaser\stream\interfaces\part\CommonInterface;
 use Throwable;
 
 /**

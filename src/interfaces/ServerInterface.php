@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream\interfaces;
 
-use chaser\stream\exceptions\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
-use chaser\stream\interfaces\parts\{CommonInterface, ContextInterface, ServiceInterface};
+use chaser\stream\exception\{ServerCreatedException, ServerPauseAcceptException, ServerResumeAcceptException};
+use chaser\stream\interfaces\part\{CommonInterface, ContextInterface, ServiceInterface};
 
 /**
  * 流服务器接口

@@ -1,11 +1,13 @@
 <?php
 
-namespace chaser\stream\interfaces\parts;
+declare(strict_types=1);
+
+namespace chaser\stream\interfaces\part;
 
 /**
  * 公共部分接口（事件调度、属性配置、套接字流）
  *
- * @package chaser\stream\interfaces\parts
+ * @package chaser\stream\interfaces\part
  */
 interface CommonInterface
 {

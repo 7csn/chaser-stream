@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream\traits;
 
-use chaser\stream\interfaces\parts\CommunicationInterface;
+use chaser\stream\interfaces\part\CommunicationInterface;
 
 /**
  * 通信特征

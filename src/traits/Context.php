@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace chaser\stream\traits;
 
-use chaser\stream\interfaces\parts\ContextInterface;
+use chaser\stream\interfaces\part\ContextInterface;
 
 /**
  * 流资源上下文特征
