@@ -92,7 +92,7 @@ abstract class Server implements ServerInterface
         if ($this->running === false) {
             $this->running = true;
             $this->listen();
-            $this->run();
+            $this->running();
         }
     }
 
@@ -179,7 +179,7 @@ abstract class Server implements ServerInterface
     /**
      * 服务器运行
      */
-    protected function run(): void
+    protected function running(): void
     {
         $this->dispatch(Start::class);
         $this->reactor->loop();
