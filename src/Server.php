@@ -92,8 +92,7 @@ abstract class Server implements ServerInterface
         if ($this->running === false) {
             $this->running = true;
             $this->listen();
-            $this->dispatch(Start::class);
-            $this->reactor->loop();
+            $this->run();
         }
     }
 
@@ -124,19 +123,11 @@ abstract class Server implements ServerInterface
      */
     protected function listen(): void
     {
-        $this->internalSubscription();
-
         if ($this->socket === null) {
-            $socketAddress = self::getSocketAddress();
-            $errno = 0;
-            $errStr = '';
-            $context = $this->getContext();
-            $this->socket = stream_socket_server($socketAddress, $errno, $errStr, static::$flags, $context) ?: null;
-            if ($this->socket === null) {
-                throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
-            }
-            $this->socketHandle();
-            $this->addReadReact([$this, 'accept']);
+            $this->internalSubscription();
+            $this->createSocket();
+            $this->configureSocket();
+            $this->createSocketHandle();
         }
     }
 
@@ -152,19 +143,54 @@ abstract class Server implements ServerInterface
     }
 
     /**
+     * 创建套接字资源
+     *
+     * @throws ServerCreatedException
+     */
+    protected function createSocket(): void
+    {
+        $socketAddress = self::getSocketAddress();
+        $errno = 0;
+        $errStr = '';
+        $context = $this->getContext();
+        $this->socket = stream_socket_server($socketAddress, $errno, $errStr, static::$flags, $context) ?: null;
+        if ($this->socket === null) {
+            throw new ServerCreatedException(sprintf('Server[%s] create failed：%d %s', $socketAddress, $errno, $errStr));
+        }
+    }
+
+    /**
+     * 配置套接字
+     */
+    protected function configureSocket(): void
+    {
+        // 非阻塞模式
+        stream_set_blocking($this->socket, false);
+    }
+
+    /**
+     * 新建套接字资源处理
+     */
+    protected function createSocketHandle(): void
+    {
+        $this->addReadReact([$this, 'accept']);
+    }
+
+    /**
+     * 服务器运行
+     */
+    protected function run(): void
+    {
+        $this->dispatch(Start::class);
+        $this->reactor->loop();
+    }
+
+    /**
      * 关闭服务器资源
      */
     protected function close(): void
     {
         $this->closeSocket();
         $this->dispatcher->clear();
-    }
-
-    /**
-     * 套接字资源处理
-     */
-    protected function socketHandle(): void
-    {
-        stream_set_blocking($this->socket, false);
     }
 }
