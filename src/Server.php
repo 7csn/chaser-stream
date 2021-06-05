@@ -89,7 +89,7 @@ abstract class Server implements ServerInterface
      */
     public function start(): void
     {
-        if ($this->socket) {
+        if ($this->socket === null) {
             $this->listen();
             $this->running();
         }
