@@ -46,7 +46,7 @@ abstract class Server implements ServerInterface
      *
      * @var bool
      */
-    private bool $stopping = true;
+    private bool $stopping = false;
 
     /**
      * @inheritDoc
