@@ -35,18 +35,18 @@ abstract class Server implements ServerInterface
     protected string $target;
 
     /**
-     * 是否处于运行中
-     *
-     * @var bool
-     */
-    private bool $running = false;
-
-    /**
      * 是否处于接收中
      *
      * @var bool
      */
     private bool $accepting = false;
+
+    /**
+     * 是否处于停止中
+     *
+     * @var bool
+     */
+    private bool $stopping = true;
 
     /**
      * @inheritDoc
@@ -89,8 +89,7 @@ abstract class Server implements ServerInterface
      */
     public function start(): void
     {
-        if ($this->running === false) {
-            $this->running = true;
+        if ($this->socket) {
             $this->listen();
             $this->running();
         }
@@ -101,10 +100,11 @@ abstract class Server implements ServerInterface
      */
     public function stop(): void
     {
-        if ($this->running) {
-            $this->running = false;
+        if ($this->stopping === false) {
+            $this->stopping = true;
             $this->dispatch(Stop::class);
             $this->unListen();
+            $this->reactor->destroy();
         }
     }
 
