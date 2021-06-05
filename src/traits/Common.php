@@ -177,14 +177,14 @@ trait Common
     }
 
     /**
-     * 添加读事件侦听到事件循环
+     * 设置读事件侦听到事件循环
      *
      * @param callable $callback
      * @return bool
      */
-    protected function addReadReact(callable $callback): bool
+    protected function setReadReact(callable $callback): bool
     {
-        return $this->reactor->addRead($this->socket, $callback);
+        return $this->reactor->setRead($this->socket, $callback);
     }
 
     /**

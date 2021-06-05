@@ -108,7 +108,7 @@ abstract class Client implements ClientInterface
      */
     protected function readyHandle(): void
     {
-        $this->addReadReact([$this, 'receive']);
+        $this->setReadReact([$this, 'receive']);
         $this->dispatch(Ready::class);
     }
 }

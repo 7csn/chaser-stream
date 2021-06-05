@@ -173,7 +173,7 @@ abstract class Server implements ServerInterface
      */
     protected function createSocketHandle(): void
     {
-        $this->addReadReact([$this, 'accept']);
+        $this->setReadReact([$this, 'accept']);
     }
 
     /**
