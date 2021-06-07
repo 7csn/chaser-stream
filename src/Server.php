@@ -89,10 +89,8 @@ abstract class Server implements ServerInterface
      */
     public function start(): void
     {
-        if ($this->socket === null) {
-            $this->listen();
-            $this->running();
-        }
+        $this->listen();
+        $this->running();
     }
 
     /**
@@ -181,8 +179,10 @@ abstract class Server implements ServerInterface
      */
     protected function running(): void
     {
-        $this->dispatch(Start::class);
-        $this->reactor->loop();
+        if ($this->socket) {
+            $this->dispatch(Start::class);
+            $this->reactor->loop();
+        }
     }
 
     /**
